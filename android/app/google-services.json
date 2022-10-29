@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "612708400195",
+    "project_id": "rittermicroblog",
+    "storage_bucket": "rittermicroblog.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:612708400195:android:f7d3501e81c5daeb3968f6",
+        "android_client_info": {
+          "package_name": "com.example.ritter_microblog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "612708400195-ur45993pko48pckdcskugie8l8a712cb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH2nNDOno_gOy8O-uJhJEWYONtYW8mOhk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "612708400195-ur45993pko48pckdcskugie8l8a712cb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "612708400195-r15irro8idi680thot57u6roep8k1kbu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ritterMicroblog"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
