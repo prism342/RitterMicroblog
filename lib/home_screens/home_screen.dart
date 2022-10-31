@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ritter_microblog/home_screens/explore_screen.dart';
 import 'package:ritter_microblog/home_screens/feed_screen.dart';
+import 'package:ritter_microblog/home_screens/my_drawer.dart';
 import 'package:ritter_microblog/home_screens/notifications_screen.dart';
 import 'package:ritter_microblog/home_screens/profile_screen.dart';
 
@@ -20,7 +21,9 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
     });
   }
 
-  final screens = const [
+  final _screenTitles = const ["Feed", "Explore", "Notifications", "Profile"];
+
+  final _screens = const [
     MyFeedScreen(),
     MyExploreScreen(),
     MyNotificationsScreen(),
@@ -29,8 +32,20 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
-      body: screens[_selectedTabIndex],
+      key: _scaffoldKey,
+      appBar: AppBar(
+        leading: GestureDetector(
+          child: Text("Profile Pic"),
+          onTap: () => _scaffoldKey.currentState?.openDrawer(),
+        ),
+        title: Text(_screenTitles[_selectedTabIndex]),
+        centerTitle: true,
+      ),
+      drawer: MyDrawer(),
+      body: _screens[_selectedTabIndex],
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, "/new-post");

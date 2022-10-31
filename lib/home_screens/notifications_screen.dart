@@ -11,11 +11,11 @@ class _MyNotificationsScreenState extends State<MyNotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Text("Profile Pic"),
-        title: const Text("Notifications"),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   leading: Text("Profile Pic"),
+      //   title: const Text("Notifications"),
+      //   centerTitle: true,
+      // ),
       body: Container(
         color: Colors.white,
         child: Text("Notifications Screen"),
