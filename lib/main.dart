@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ritter_microblog/new_post_screen.dart';
-import 'package:ritter_microblog/settings_screen.dart';
-import 'package:ritter_microblog/themes.dart';
+
+import 'auth_screens/signin_screen.dart';
+import 'auth_screens/verify_email_screen.dart';
+import 'home_screens/home_screen.dart';
+import 'new_post_screen.dart';
+import 'settings_screen.dart';
+import 'themes.dart';
 
 import 'firebase_options.dart';
-import 'auth_screens/auth_screens.dart';
-import 'home_screens/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,9 +44,9 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       initialRoute: initialRoute,
       routes: {
-        '/signin': buildSignInScreen,
-        '/verify-email': buildEmailVerificationScreen,
-        '/forgot-password': buildForgotPasswordScreen,
+        '/signin': (context) => MySigninScreen(),
+        '/verify-email': (context) => MyVerifyEmailScreen(),
+        // '/forgot-password': buildForgotPasswordScreen,
         '/home': (context) => const MyHomeScreen(),
         '/new-post': (context) => const MyNewPostScreen(),
         '/settings': (context) => const MySettingsScreen()

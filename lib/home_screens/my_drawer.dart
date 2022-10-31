@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -18,9 +19,9 @@ class _MyDrawerState extends State<MyDrawer> {
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
+          DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Theme.of(context).backgroundColor,
             ),
             child: Text('Drawer Header'),
           ),
@@ -32,10 +33,26 @@ class _MyDrawerState extends State<MyDrawer> {
             },
           ),
           ListTile(
-            title: const Text('Item 2'),
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Icon(
+                Icons.logout,
+                // size: Theme.of(context).iconTheme.size,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+            title: Text(
+              'Logout',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            // dense: true,
+            // minLeadingWidth: 32,
+            // horizontalTitleGap: 20,
             onTap: () {
               // Update the state of the app.
               // ...
+              FirebaseAuth.instance.signOut();
+              Navigator.pushReplacementNamed(context, '/signin');
             },
           ),
         ],

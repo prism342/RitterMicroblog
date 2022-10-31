@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ritter_microblog/home_screens/explore_screen.dart';
-import 'package:ritter_microblog/home_screens/feed_screen.dart';
-import 'package:ritter_microblog/home_screens/my_drawer.dart';
-import 'package:ritter_microblog/home_screens/notifications_screen.dart';
-import 'package:ritter_microblog/home_screens/profile_screen.dart';
+
+import 'my_drawer.dart';
+import 'feed_screen.dart';
+import 'explore_screen.dart';
+import 'notifications_screen.dart';
+import 'profile_screen.dart';
 
 class MyHomeScreen extends StatefulWidget {
   const MyHomeScreen({super.key});
@@ -14,6 +15,8 @@ class MyHomeScreen extends StatefulWidget {
 
 class _MyHomeScreenState extends State<MyHomeScreen> {
   int _selectedTabIndex = 0;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _onBottomBarTapped(int index) {
     setState(() {
@@ -32,17 +35,22 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         leading: GestureDetector(
-          child: Text("Profile Pic"),
+          child: Text(
+            "Profile Pic",
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
           onTap: () => _scaffoldKey.currentState?.openDrawer(),
         ),
-        title: Text(_screenTitles[_selectedTabIndex]),
+        title: Text(
+          _screenTitles[_selectedTabIndex],
+          style: TextStyle(color: Theme.of(context).primaryColor),
+        ),
         centerTitle: true,
+        elevation: 1,
       ),
       drawer: MyDrawer(),
       body: _screens[_selectedTabIndex],

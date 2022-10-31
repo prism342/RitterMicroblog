@@ -16,11 +16,11 @@ class MyTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? effectiveBackgroundColor = backgroundColor;
     if (backgroundColor == null) {
-      effectiveBackgroundColor = Theme.of(context).colorScheme.background;
+      effectiveBackgroundColor = Theme.of(context).colorScheme.primary;
     }
     Color? effectiveTextColor = backgroundColor;
     if (textColor == null) {
-      effectiveTextColor = Theme.of(context).colorScheme.onBackground;
+      effectiveTextColor = Theme.of(context).colorScheme.onPrimary;
     }
 
     return TextButton(
