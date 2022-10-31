@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ritter_microblog/new_post_screen.dart';
+import 'package:ritter_microblog/settings_screen.dart';
+import 'package:ritter_microblog/themes.dart';
 
 import 'firebase_options.dart';
-import 'auth_screens.dart';
-import 'bottom_nav_screen.dart';
+import 'auth_screens/auth_screens.dart';
+import 'home_screens/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,15 +37,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Ritter Microblog',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system,
       initialRoute: initialRoute,
       routes: {
         '/signin': buildSignInScreen,
         '/verify-email': buildEmailVerificationScreen,
         '/forgot-password': buildForgotPasswordScreen,
-        '/home': (context) => const BottomNavigationScreen(),
+        '/home': (context) => const MyHomeScreen(),
+        '/new-post': (context) => const MyNewPostScreen(),
+        '/settings': (context) => const MySettingsScreen()
       },
     );
   }

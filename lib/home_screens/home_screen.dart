@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:ritter_microblog/explore_screen.dart';
-import 'package:ritter_microblog/home_screen.dart';
-import 'package:ritter_microblog/notifications_screen.dart';
-import 'package:ritter_microblog/profile_screen.dart';
+import 'package:ritter_microblog/home_screens/explore_screen.dart';
+import 'package:ritter_microblog/home_screens/feed_screen.dart';
+import 'package:ritter_microblog/home_screens/notifications_screen.dart';
+import 'package:ritter_microblog/home_screens/profile_screen.dart';
 
-class BottomNavigationScreen extends StatefulWidget {
-  const BottomNavigationScreen({super.key});
+class MyHomeScreen extends StatefulWidget {
+  const MyHomeScreen({super.key});
 
   @override
-  State<BottomNavigationScreen> createState() => _BottomNavigationScreenState();
+  State<MyHomeScreen> createState() => _MyHomeScreenState();
 }
 
-class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
+class _MyHomeScreenState extends State<MyHomeScreen> {
   int _selectedTabIndex = 0;
 
   void _onBottomBarTapped(int index) {
@@ -21,7 +21,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   }
 
   final screens = const [
-    MyHomeScreen(),
+    MyFeedScreen(),
     MyExploreScreen(),
     MyNotificationsScreen(),
     MyProfileScreen()
@@ -30,14 +30,13 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Home"),
-      ),
       body: screens[_selectedTabIndex],
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, "/new-post");
+        },
         tooltip: 'New post',
-        child: const Icon(Icons.note_add_rounded),
+        child: const Icon(Icons.add_comment_rounded, size: 30),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -59,8 +58,8 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           ),
         ],
         currentIndex: _selectedTabIndex,
-        selectedItemColor: Colors.amber[800],
-        // unselectedItemColor: Colors.grey,
+        // selectedItemColor: Colors.amber[800],
+        // unselectedItemColor: Colors.grey[500],
         showUnselectedLabels: false,
         showSelectedLabels: false,
         type: BottomNavigationBarType.fixed,

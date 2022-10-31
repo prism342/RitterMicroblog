@@ -10,9 +10,16 @@ class MyExploreScreen extends StatefulWidget {
 class _MyExploreScreenState extends State<MyExploreScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Text("Explore Screen"),
+    return Scaffold(
+      appBar: AppBar(
+        leading: Text("Profile Pic"),
+        title: const Text("Discover"),
+        centerTitle: true,
+      ),
+      body: Container(
+        color: Colors.white,
+        child: Text("Explore Screen"),
+      ),
     );
   }
 }
