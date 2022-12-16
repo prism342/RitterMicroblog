@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ritter_microblog/auth_screens/signup_screen.dart';
 
 import 'auth_screens/signin_screen.dart';
 import 'auth_screens/verify_email_screen.dart';
-import 'home_screens/home_screen.dart';
-import 'new_post_screen.dart';
-import 'settings_screen.dart';
+import 'screens/home_screen/home_screen.dart';
+import 'screens/new_post_screen.dart';
+import 'screens/settings_screen.dart';
 import 'themes.dart';
 
 import 'firebase_options.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
     if (auth.currentUser == null) {
       return '/signin';
     }
-    if (!auth.currentUser!.emailVerified && auth.currentUser!.email != null) {
+    if (!auth.currentUser!.emailVerified) {
       return '/verify-email';
     }
     return '/home';
@@ -44,8 +45,9 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       initialRoute: initialRoute,
       routes: {
-        '/signin': (context) => MySigninScreen(),
-        '/verify-email': (context) => MyVerifyEmailScreen(),
+        '/signin': (context) => const MySigninScreen(),
+        '/signup': (context) => const MySignupScreen(),
+        '/verify-email': (context) => const MyVerifyEmailScreen(),
         // '/forgot-password': buildForgotPasswordScreen,
         '/home': (context) => const MyHomeScreen(),
         '/new-post': (context) => const MyNewPostScreen(),

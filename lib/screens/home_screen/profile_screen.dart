@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../my_widgets.dart';
+import '../../widgets/my_buttons.dart';
 
 class MyProfileScreen extends StatefulWidget {
   const MyProfileScreen({super.key});
