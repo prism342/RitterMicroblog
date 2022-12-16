@@ -22,41 +22,48 @@ class _MySignupScreenState extends State<MySignupScreen> {
     return Scaffold(
       // appBar: AppBar(title: Text("Ritter")),
       body: SafeArea(
+        child: SingleChildScrollView(
           child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(children: [
-          const Logo(),
-          Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  MyAuthTextField(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      controller: _emailController,
-                      labelText: "Email"),
-                  MyAuthTextField(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      controller: _usernameController,
-                      labelText: "Username"),
-                  MyPasswordTextField(
-                      padding: const EdgeInsets.only(bottom: 36),
-                      controller: _passwordController),
-                  MyAuthButton(
-                    padding: const EdgeInsets.only(bottom: 36),
-                    lable: "Signup",
-                    onPressed: () => {_formKey.currentState!.validate()},
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              children: [
+                const Logo(),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      MyAuthTextField(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          controller: _emailController,
+                          labelText: "Email"),
+                      MyAuthTextField(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          controller: _usernameController,
+                          labelText: "Username"),
+                      MyPasswordTextField(
+                          padding: const EdgeInsets.only(bottom: 36),
+                          controller: _passwordController),
+                      MyAuthButton(
+                        padding: const EdgeInsets.only(bottom: 36),
+                        lable: "Signup",
+                        onPressed: () => {_formKey.currentState!.validate()},
+                      ),
+                      MyTextWithButton(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        text: "Already have an account? ",
+                        buttonText: "Signin",
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, "/signin");
+                        },
+                      )
+                    ],
                   ),
-                  MyTextWithButton(
-                    text: "Already have an account? ",
-                    buttonText: "Signin",
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, "/signin");
-                    },
-                  )
-                ],
-              ))
-        ]),
-      )),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

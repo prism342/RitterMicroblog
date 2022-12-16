@@ -63,7 +63,7 @@ class _MyPasswordTextFieldState extends State<MyPasswordTextField> {
     Widget suffixIcon = IconButton(
       icon: Icon(
         _showPassword ? Icons.visibility : Icons.visibility_off,
-        color: Theme.of(context).primaryColorDark,
+        // color: Theme.of(context).primaryColorDark,
       ),
       onPressed: () {
         setState(() {

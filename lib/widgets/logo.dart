@@ -18,7 +18,7 @@ class Logo extends StatelessWidget {
           ),
           Text(
             "Microblog",
-            style: TextStyle(color: themeData.primaryColor, fontSize: 24),
+            style: TextStyle(color: themeData.primaryColor, fontSize: 26),
           )
         ],
       ),
