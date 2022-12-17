@@ -26,11 +26,8 @@ class MyApp extends StatelessWidget {
 
   String get initialRoute {
     final auth = FirebaseAuth.instance;
-    if (auth.currentUser == null) {
+    if (auth.currentUser == null || !auth.currentUser!.emailVerified) {
       return '/signin';
-    }
-    if (!auth.currentUser!.emailVerified) {
-      return '/verify-email';
     }
     return '/home';
   }
