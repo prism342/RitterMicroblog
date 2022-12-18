@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'my_drawer.dart';
-import 'feed_screen.dart';
-import 'explore_screen.dart';
-import 'notifications_screen.dart';
-import 'profile_screen.dart';
+import 'feed_tab.dart';
+import 'explore_tab.dart';
+import 'notifications_tab.dart';
+import 'profile_tab.dart';
 
 class MyHomeScreen extends StatefulWidget {
   const MyHomeScreen({super.key});
@@ -27,32 +27,32 @@ class _MyHomeScreenState extends State<MyHomeScreen> {
   final _screenTitles = const ["Feed", "Explore", "Notifications", "Profile"];
 
   final _screens = const [
-    MyFeedScreen(),
-    MyExploreScreen(),
-    MyNotificationsScreen(),
-    MyProfileScreen()
+    MyFeedTab(),
+    MyExploreTab(),
+    MyNotificationsTab(),
+    MyProfileTab()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        leading: GestureDetector(
-          child: Text(
-            "Profile Pic",
-            style: TextStyle(color: Theme.of(context).primaryColor),
-          ),
-          onTap: () => _scaffoldKey.currentState?.openDrawer(),
-        ),
-        title: Text(
-          _screenTitles[_selectedTabIndex],
-          style: TextStyle(color: Theme.of(context).primaryColor),
-        ),
-        centerTitle: true,
-        elevation: 1,
-      ),
-      drawer: MyDrawer(),
+      // appBar: AppBar(
+      //   leading: GestureDetector(
+      //     child: Text(
+      //       "Profile Pic",
+      //       // style: TextStyle(color: Theme.of(context).primaryColor),
+      //     ),
+      //     onTap: () => _scaffoldKey.currentState?.openDrawer(),
+      //   ),
+      //   title: Text(
+      //     _screenTitles[_selectedTabIndex],
+      //     // style: TextStyle(color: Theme.of(context).primaryColor),
+      //   ),
+      //   centerTitle: true,
+      //   elevation: 1,
+      // ),
+      // drawer: MyDrawer(),
       body: _screens[_selectedTabIndex],
       floatingActionButton: FloatingActionButton(
         onPressed: () {

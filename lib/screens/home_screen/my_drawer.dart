@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ritter_microblog/firebase_apis.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -48,10 +48,8 @@ class _MyDrawerState extends State<MyDrawer> {
             // dense: true,
             // minLeadingWidth: 32,
             // horizontalTitleGap: 20,
-            onTap: () {
-              // Update the state of the app.
-              // ...
-              FirebaseAuth.instance.signOut();
+            onTap: () async {
+              await signout();
               Navigator.pushReplacementNamed(context, '/signin');
             },
           ),

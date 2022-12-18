@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/my_buttons.dart';
 
-class MyProfileScreen extends StatefulWidget {
-  const MyProfileScreen({super.key});
+class MyProfileTab extends StatefulWidget {
+  const MyProfileTab({super.key});
 
   @override
-  State<MyProfileScreen> createState() => _MyProfileScreenState();
+  State<MyProfileTab> createState() => _MyProfileTabState();
 }
 
-class _MyProfileScreenState extends State<MyProfileScreen> {
+class _MyProfileTabState extends State<MyProfileTab> {
+  void onEditButtonPress() {
+    Navigator.pushNamed(context, '/edit-profile');
+  }
+
   @override
   Widget build(BuildContext context) {
     final profileTextColor = Theme.of(context).textTheme.caption?.color;
@@ -19,11 +23,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     int following = 0;
 
     return Scaffold(
-      // appBar: AppBar(
-      //   leading: const Text("Profile Pic"),
-      //   title: const Text("Profile"),
-      //   centerTitle: true,
-      // ),
+      appBar: AppBar(
+        // leading: const Text("Profile Pic"),
+        title: const Text("Profile"),
+        centerTitle: true,
+      ),
       body: Stack(
         children: [
           Column(
@@ -39,8 +43,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        MyTextButton("Edit"),
+                      children: [
+                        MySmallButton(
+                          "Edit",
+                          onPressed: onEditButtonPress,
+                        ),
                       ],
                     ),
                     Text(

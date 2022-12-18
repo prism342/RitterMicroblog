@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
-class MyTextButton extends StatelessWidget {
-  const MyTextButton(
-    this.title, {
-    Key? key,
-    this.backgroundColor,
-    this.textColor,
-  }) : super(key: key);
-
+class MySmallButton extends StatelessWidget {
   final String title;
   final Color? backgroundColor;
   final Color? textColor;
+  final void Function() onPressed;
+
+  const MySmallButton(
+    this.title, {
+    Key? key,
+    required this.onPressed,
+    this.backgroundColor,
+    this.textColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class MyTextButton extends StatelessWidget {
     }
 
     return TextButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(effectiveBackgroundColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(

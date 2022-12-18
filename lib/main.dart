@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ritter_microblog/auth_screens/signup_screen.dart';
+import 'package:ritter_microblog/screens/edit_profile_screen.dart';
 
 import 'auth_screens/signin_screen.dart';
 import 'auth_screens/verify_email_screen.dart';
@@ -48,7 +49,8 @@ class MyApp extends StatelessWidget {
         // '/forgot-password': buildForgotPasswordScreen,
         '/home': (context) => const MyHomeScreen(),
         '/new-post': (context) => const MyNewPostScreen(),
-        '/settings': (context) => const MySettingsScreen()
+        '/settings': (context) => const MySettingsScreen(),
+        '/edit-profile': (context) => const MyEditProfileScreen(),
       },
     );
   }
