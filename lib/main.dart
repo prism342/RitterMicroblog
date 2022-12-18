@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ritter_microblog/auth_screens/signup_screen.dart';
 import 'package:ritter_microblog/screens/edit_profile_screen.dart';
+import 'package:ritter_microblog/screens/edit_username_screen.dart';
 
 import 'auth_screens/signin_screen.dart';
 import 'auth_screens/verify_email_screen.dart';

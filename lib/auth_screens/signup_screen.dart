@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:ritter_microblog/data_models.dart';
 import 'package:ritter_microblog/firebase_apis.dart';
 import 'package:ritter_microblog/widgets/my_text_fields.dart';
 import 'package:ritter_microblog/widgets/logo.dart';
+import 'package:ritter_microblog/widgets/toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer' as developer;
 
@@ -22,44 +24,42 @@ class _MySignupScreenState extends State<MySignupScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void onSignupButtonClick() async {
+  void onSignupButtonPressed() async {
     if (_formKey.currentState!.validate()) {
       try {
         await signup(
           _emailController.text,
           _passwordController.text,
         );
-        await sendVerificationEmail();
       } on FirebaseAuthException catch (e) {
-        Fluttertoast.showToast(
-          msg: e.message ?? "An error occurred.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          // backgroundColor: Colors.red,
-          // textColor: Colors.white,
-        );
+        showInfoToast(e.message ?? "An error occurred.");
+
         return;
       } catch (e) {
         developer.log("Exception: ${e.toString()}",
             name: 'onSignupButtonClick');
 
-        Fluttertoast.showToast(
-          msg: "Signup failed.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-        );
+        showInfoToast("Signup failed.");
+
         return;
       }
 
-      Fluttertoast.showToast(
-        msg: "Signup success!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-      );
+      showInfoToast("Signup success!");
 
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("email", _emailController.text);
-      prefs.setString("password", _passwordController.text);
+      SharedPreferences.getInstance().then((prefs) {
+        prefs.setString("email", _emailController.text);
+        prefs.setString("password", _passwordController.text);
+      });
+
+      sendVerificationEmail();
+
+      String uid = getSelfUid() ?? "";
+      updateSelfProfileData(
+        UserData(
+            username: _usernameController.text,
+            handle: uid.substring(0, 8),
+            joinedDate: DateTime.now()),
+      );
 
       if (!mounted) return;
 
@@ -96,7 +96,7 @@ class _MySignupScreenState extends State<MySignupScreen> {
                       MyAuthButton(
                         padding: const EdgeInsets.only(bottom: 36),
                         lable: "Signup",
-                        onPressed: onSignupButtonClick,
+                        onPressed: onSignupButtonPressed,
                       ),
                       MyTextWithButton(
                         padding: const EdgeInsets.only(bottom: 12),

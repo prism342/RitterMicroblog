@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../firebase_apis.dart';
 import '../../widgets/my_buttons.dart';
 
 class MyProfileTab extends StatefulWidget {
@@ -11,6 +12,8 @@ class MyProfileTab extends StatefulWidget {
 }
 
 class _MyProfileTabState extends State<MyProfileTab> {
+  final selfUserDataStream = getSelfProfileDataStream();
+
   void onEditButtonPress() {
     Navigator.pushNamed(context, '/edit-profile');
   }
