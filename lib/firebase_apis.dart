@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,6 +40,23 @@ Future<void> uploadImage(String cloudPath) async {
 }
 
 Future<void> uploadProfilePic(String cloudPath) async {}
+
+// Future<String?> getProfilePicUrl() async {
+//   String? url;
+
+//   String uid = getSelfUid() ?? "";
+
+//   try {
+//     url = await FirebaseStorage.instance
+//         .ref()
+//         .child('user/$uid/profile-picture.png')
+//         .getDownloadURL();
+//   } on FirebaseException catch (e) {
+//     log(e.message.toString());
+//   }
+
+//   return url;
+// }
 
 Stream<UserData> getUserProfileDataStream(String uid) {
   var selfUserDataSnapshotStream = userProfileCol.doc(uid).snapshots();

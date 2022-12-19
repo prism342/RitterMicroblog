@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ritter_microblog/widgets/stream_data_widgets.dart';
 
 import '../../firebase_apis.dart';
 import '../../widgets/my_buttons.dart';
@@ -44,53 +45,41 @@ class _MyProfileTabState extends State<MyProfileTab> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: MySmallButton(
+                        "Edit",
+                        onPressed: onEditButtonPress,
+                      ),
+                    ),
+                    MyStreamDataUsername(
+                      usernameStream:
+                          selfUserDataStream.map((value) => value.username),
+                    ),
+                    MyStreamDataUserHandle(
+                      userHandleStream:
+                          selfUserDataStream.map((value) => value.handle),
+                    ),
+                    SizedBox(height: 8),
+                    MyStreamDataJoinedDate(
+                      joinedDateStream:
+                          selfUserDataStream.map((value) => value.joinedDate),
+                    ),
+                    SizedBox(height: 8),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        MySmallButton(
-                          "Edit",
-                          onPressed: onEditButtonPress,
+                        Text("$followers"),
+                        Text(
+                          " Followers",
+                          style: profileTextStyle,
                         ),
+                        Text(
+                          "   ",
+                          style: profileTextStyle,
+                        ),
+                        Text("$following"),
+                        Text(" Following", style: profileTextStyle)
                       ],
-                    ),
-                    Text(
-                      "Username",
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                    Text("@${FirebaseAuth.instance.currentUser?.uid}",
-                        style: profileTextStyle),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Icon(
-                            Icons.calendar_month_rounded,
-                            color: profileTextColor,
-                            size: 20,
-                          ),
-                          Text("  ", style: profileTextStyle),
-                          Text("Joined date", style: profileTextStyle)
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Row(
-                        children: [
-                          Text("$followers"),
-                          Text(
-                            " Followers",
-                            style: profileTextStyle,
-                          ),
-                          Text(
-                            "   ",
-                            style: profileTextStyle,
-                          ),
-                          Text("$following"),
-                          Text(" Following", style: profileTextStyle)
-                        ],
-                      ),
                     ),
                   ],
                 ),
@@ -104,17 +93,12 @@ class _MyProfileTabState extends State<MyProfileTab> {
                   )
                 ]),
               ),
-              Divider(
-                thickness: 2,
-              ),
+              Divider(thickness: 2),
             ],
           ),
-          Container(
-            child: Text("ProfilePic"),
-            color: Colors.amber,
-            height: 50,
-            width: 50,
-            margin: EdgeInsets.only(left: 24, top: 75),
+          MyStreamDataProfilePicture(
+            profilePicUrlStream:
+                selfUserDataStream.map((value) => value.profilePicUrl),
           ),
         ],
       ),
