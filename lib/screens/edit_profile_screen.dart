@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ritter_microblog/screens/edit_handle_screen.dart';
 import 'package:ritter_microblog/screens/edit_username_screen.dart';
+import 'package:ritter_microblog/widgets/my_images.dart';
+import 'package:ritter_microblog/widgets/toast.dart';
 
 import '../data_models.dart';
 import '../firebase_apis.dart';
@@ -24,6 +29,7 @@ class _MyEditProfileScreenState extends State<MyEditProfileScreen> {
               ? Text(title)
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [Text(title), content],
                 ),
           trailing: trailing,
@@ -57,7 +63,23 @@ class _MyEditProfileScreenState extends State<MyEditProfileScreen> {
 
     return ListView(
       children: [
-        buildTile("Profile Picture", null, () {}),
+        buildTile(
+          "Profile Picture",
+          Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: MyProfilePic(url: snapshot.data!.profilePicUrl)),
+          () async {
+            final ImagePicker _picker = ImagePicker();
+            // Pick an image
+            final XFile? image =
+                await _picker.pickImage(source: ImageSource.gallery);
+            log((image?.path).toString());
+            if (image != null) {
+              await uploadProfilePic(image.path);
+              showInfoToast("Update sucess");
+            }
+          },
+        ),
         buildTile(
             "Username",
             Text(

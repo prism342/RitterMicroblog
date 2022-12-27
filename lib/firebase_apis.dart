@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -34,12 +35,22 @@ bool? isEmailVerified() {
   return FirebaseAuth.instance.currentUser?.emailVerified;
 }
 
-Future<void> uploadImage(String cloudPath) async {
+Future<String> uploadImage(String localPath, String cloudPath) async {
   final storageRef = FirebaseStorage.instance.ref();
   final imageRef = storageRef.child(cloudPath);
+
+  File file = File(localPath);
+
+  await imageRef.putFile(file);
+
+  return imageRef.getDownloadURL();
 }
 
-Future<void> uploadProfilePic(String cloudPath) async {}
+Future<void> uploadProfilePic(String localPath) async {
+  final imageUrl =
+      await uploadImage(localPath, "user/${getSelfUid()}/profile-pic");
+  updateSelfProfileData(UserData(profilePicUrl: imageUrl));
+}
 
 // Future<String?> getProfilePicUrl() async {
 //   String? url;
