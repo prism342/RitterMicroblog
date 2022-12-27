@@ -1,13 +1,13 @@
 import 'dart:developer';
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:ritter_microblog/data_models.dart';
 
 final userProfileCol = FirebaseFirestore.instance.collection('userProfile');
+final postsCol = FirebaseFirestore.instance.collection('posts');
 
 Future<void> signup(String email, String password) async {
   // final credential =
@@ -79,6 +79,8 @@ Stream<UserData> getUserProfileDataStream(String uid) {
 }
 
 Stream<UserData> getSelfProfileDataStream() {
+  log("get user data stream");
+
   String selfUserID = FirebaseAuth.instance.currentUser?.uid ?? "";
 
   return getUserProfileDataStream(selfUserID);
@@ -96,4 +98,25 @@ String? getSelfEmail() {
 
 String? getSelfUid() {
   return FirebaseAuth.instance.currentUser?.uid;
+}
+
+Future<void> createPost(String textContent, List<String> localImages) async {
+  // create post doc
+  final doc = postsCol.doc();
+
+  // upload images
+  List<String> imageURLs = [];
+  for (int i = 0; i < localImages.length; i++) {
+    imageURLs.add(await uploadImage(
+        localImages[i], "user/${getSelfUid()}/posts/${doc.id}/$i"));
+  }
+
+  // create post object
+  final post = Post(
+      creatorID: getSelfUid(),
+      timestamp: Timestamp.now(),
+      textContent: textContent,
+      imageURLs: imageURLs);
+
+  await doc.set(post.toData());
 }

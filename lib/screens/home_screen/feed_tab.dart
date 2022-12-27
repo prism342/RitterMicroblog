@@ -15,6 +15,7 @@ class _MyFeedTabState extends State<MyFeedTab> {
         // leading: Text("Profile Pic"),
         title: const Text("Feed"),
         centerTitle: true,
+        elevation: 2,
       ),
       body: Container(
         color: Colors.white,

@@ -15,6 +15,7 @@ class _MyNotificationsTabState extends State<MyNotificationsTab> {
         // leading: Text("Profile Pic"),
         title: const Text("Notifications"),
         centerTitle: true,
+        elevation: 2,
       ),
       body: Container(
         color: Colors.white,

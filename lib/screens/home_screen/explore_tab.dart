@@ -15,6 +15,7 @@ class _MyExploreTabState extends State<MyExploreTab> {
         // leading: Text("Profile Pic"),
         title: const Text("Discover"),
         centerTitle: true,
+        elevation: 2,
       ),
       body: Container(
         color: Colors.white,

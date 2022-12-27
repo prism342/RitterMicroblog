@@ -135,6 +135,7 @@ class _MyProfileTabState extends State<MyProfileTab> {
         // leading: const Text("Profile Pic"),
         title: const Text("Profile"),
         centerTitle: true,
+        elevation: 2,
       ),
       body: Column(
         children: [
