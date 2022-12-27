@@ -2,13 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ritter_microblog/screens/edit_handle_screen.dart';
-import 'package:ritter_microblog/screens/edit_username_screen.dart';
+import 'package:ritter_microblog/screens/edit_profile_screen/edit_handle_screen.dart';
+import 'package:ritter_microblog/screens/edit_profile_screen/edit_username_screen.dart';
 import 'package:ritter_microblog/widgets/my_images.dart';
 import 'package:ritter_microblog/widgets/toast.dart';
 
-import '../data_models.dart';
-import '../firebase_apis.dart';
+import '../../data_models.dart';
+import '../../firebase_apis.dart';
 
 class MyEditProfileScreen extends StatefulWidget {
   const MyEditProfileScreen({super.key});
