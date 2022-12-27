@@ -75,8 +75,12 @@ class _MyEditProfileScreenState extends State<MyEditProfileScreen> {
                 await _picker.pickImage(source: ImageSource.gallery);
             log((image?.path).toString());
             if (image != null) {
-              await uploadProfilePic(image.path);
-              showInfoToast("Update sucess");
+              try {
+                await uploadProfilePic(image.path);
+                showInfoToast("Update sucess");
+              } catch (e) {
+                showInfoToast("Update failed");
+              }
             }
           },
         ),

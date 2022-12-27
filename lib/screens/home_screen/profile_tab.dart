@@ -26,7 +26,6 @@ class _MyProfileTabState extends State<MyProfileTab> {
     int followers = 0;
     int following = 0;
 
-    ;
     String joinedDateStr = "";
     if (userData.joinedDate != null) {
       DateTime joinedDate = DateTime.fromMillisecondsSinceEpoch(
@@ -45,9 +44,12 @@ class _MyProfileTabState extends State<MyProfileTab> {
             ),
             Align(
               alignment: Alignment.centerRight,
-              child: MySmallButton(
-                "Edit",
-                onPressed: onEditButtonPress,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: MySmallButton(
+                  "Edit",
+                  onPressed: onEditButtonPress,
+                ),
               ),
             ),
             Padding(
@@ -71,7 +73,7 @@ class _MyProfileTabState extends State<MyProfileTab> {
                         size: 20,
                       ),
                       Text(
-                        "  @$joinedDateStr",
+                        "  $joinedDateStr",
                         style: TextStyle(
                             color: Theme.of(context).textTheme.caption?.color),
                       ),
