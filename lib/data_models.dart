@@ -113,3 +113,206 @@ class Post extends Object {
     return data;
   }
 }
+
+enum ActivityType { post, comment, repost, like }
+
+abstract class Activity extends Object {
+  late String? docID;
+  late String creatorID;
+  late Timestamp timestamp;
+
+  Activity({
+    this.docID,
+    required this.creatorID,
+    required this.timestamp,
+  });
+
+  Map<String, dynamic> toMap();
+}
+
+class PostActivity extends Activity {
+  late String postContent;
+  late List<String>? postImageURLs;
+
+  PostActivity({
+    String? docID,
+    required String creatorID,
+    required Timestamp timestamp,
+    required this.postContent,
+    required this.postImageURLs,
+  }) : super(docID: docID, creatorID: creatorID, timestamp: timestamp);
+
+  @override
+  Map<String, dynamic> toMap() {
+    final data = <String, dynamic>{};
+
+    data["creatorID"] = creatorID;
+    data["timestamp"] = timestamp;
+
+    data["postContent"] = postContent;
+    data["postImageURLs"] = postImageURLs;
+
+    return data;
+  }
+
+  static PostActivity? fromMap(String docID, Map<String, dynamic>? data) {
+    if (data == null) {
+      return null;
+    }
+
+    String? creatorID = cast<String>(data["creatorID"]);
+    Timestamp? timestamp = cast<Timestamp>(data["timestamp"]);
+    String? postContent = cast<String>(data["postContent"]);
+    List<String>? postImageURLs = cast<List<String>>(data["postImageURLs"]);
+
+    if (creatorID == null || timestamp == null || postContent == null) {
+      return null;
+    } else {
+      return PostActivity(
+          docID: docID,
+          creatorID: creatorID,
+          timestamp: timestamp,
+          postContent: postContent,
+          postImageURLs: postImageURLs);
+    }
+  }
+}
+
+class CommentActivity extends Activity {
+  late String refPostID;
+  late String comment;
+
+  CommentActivity({
+    String? docID,
+    required String creatorID,
+    required Timestamp timestamp,
+    required this.refPostID,
+    required this.comment,
+  }) : super(docID: docID, creatorID: creatorID, timestamp: timestamp);
+
+  @override
+  Map<String, dynamic> toMap() {
+    final data = <String, dynamic>{};
+
+    data["creatorID"] = creatorID;
+    data["timestamp"] = timestamp;
+
+    data["refPostID"] = refPostID;
+    data["comment"] = comment;
+
+    return data;
+  }
+
+  static CommentActivity? fromMap(String docID, Map<String, dynamic>? data) {
+    if (data == null) {
+      return null;
+    }
+
+    String? creatorID = cast<String>(data["creatorID"]);
+    Timestamp? timestamp = cast<Timestamp>(data["timestamp"]);
+    String? refPostID = cast<String>(data["refPostID"]);
+    String? comment = cast<String>(data["comment"]);
+
+    if (creatorID == null ||
+        timestamp == null ||
+        refPostID == null ||
+        comment == null) {
+      return null;
+    } else {
+      return CommentActivity(
+          docID: docID,
+          creatorID: creatorID,
+          timestamp: timestamp,
+          refPostID: refPostID,
+          comment: comment);
+    }
+  }
+}
+
+class RepostActivity extends Activity {
+  late String refPostID;
+
+  RepostActivity({
+    String? docID,
+    required String creatorID,
+    required Timestamp timestamp,
+    required this.refPostID,
+  }) : super(docID: docID, creatorID: creatorID, timestamp: timestamp);
+
+  @override
+  Map<String, dynamic> toMap() {
+    final data = <String, dynamic>{};
+
+    data["creatorID"] = creatorID;
+    data["timestamp"] = timestamp;
+
+    data["refPostID"] = refPostID;
+
+    return data;
+  }
+
+  static RepostActivity? fromMap(String docID, Map<String, dynamic>? data) {
+    if (data == null) {
+      return null;
+    }
+
+    String? creatorID = cast<String>(data["creatorID"]);
+    Timestamp? timestamp = cast<Timestamp>(data["timestamp"]);
+    String? refPostID = cast<String>(data["refPostID"]);
+
+    if (creatorID == null || timestamp == null || refPostID == null) {
+      return null;
+    } else {
+      return RepostActivity(
+        docID: docID,
+        creatorID: creatorID,
+        timestamp: timestamp,
+        refPostID: refPostID,
+      );
+    }
+  }
+}
+
+class LikeActivity extends Activity {
+  late String refPostID;
+
+  LikeActivity({
+    String? docID,
+    required String creatorID,
+    required Timestamp timestamp,
+    required this.refPostID,
+  }) : super(docID: docID, creatorID: creatorID, timestamp: timestamp);
+
+  @override
+  Map<String, dynamic> toMap() {
+    final data = <String, dynamic>{};
+
+    data["creatorID"] = creatorID;
+    data["timestamp"] = timestamp;
+
+    data["refPostID"] = refPostID;
+
+    return data;
+  }
+
+  static LikeActivity? fromMap(String docID, Map<String, dynamic>? data) {
+    if (data == null) {
+      return null;
+    }
+
+    String? creatorID = cast<String>(data["creatorID"]);
+    Timestamp? timestamp = cast<Timestamp>(data["timestamp"]);
+    String? refPostID = cast<String>(data["refPostID"]);
+
+    if (creatorID == null || timestamp == null || refPostID == null) {
+      return null;
+    } else {
+      return LikeActivity(
+        docID: docID,
+        creatorID: creatorID,
+        timestamp: timestamp,
+        refPostID: refPostID,
+      );
+    }
+  }
+}

@@ -1,4 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ritter_microblog/firebase_apis.dart';
+import 'package:ritter_microblog/widgets/my_post_views.dart';
+import 'package:tuple/tuple.dart';
+
+import '../../data_models.dart';
 
 class MyFeedTab extends StatefulWidget {
   const MyFeedTab({super.key});
@@ -8,6 +14,32 @@ class MyFeedTab extends StatefulWidget {
 }
 
 class _MyFeedTabState extends State<MyFeedTab> {
+  final myFeedsFuture = getLatestFeed();
+
+  Widget postListBuilder(BuildContext context,
+      AsyncSnapshot<List<Tuple2<Post, UserData>>> snapshot) {
+    if (snapshot.hasData && snapshot.data != null) {
+      final feeds = snapshot.data!;
+      return ListView.builder(
+          itemCount: feeds.length,
+          itemBuilder: (context, index) {
+            return MyPostCardView(
+              post: feeds[index].item1,
+              creator: feeds[index].item2,
+              isCommented: false,
+              isReposted: false,
+              isFavorited: false,
+            );
+          });
+    } else {
+      return Container(
+        alignment: Alignment.topCenter,
+        padding: EdgeInsets.only(top: 24),
+        child: Text("Loading..."),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,10 +49,7 @@ class _MyFeedTabState extends State<MyFeedTab> {
         centerTitle: true,
         elevation: 2,
       ),
-      body: Container(
-        color: Colors.white,
-        child: Text("Home Screen"),
-      ),
+      body: FutureBuilder(future: myFeedsFuture, builder: postListBuilder),
     );
   }
 }
