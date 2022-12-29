@@ -2,41 +2,24 @@ import 'package:flutter/material.dart';
 
 class MySmallButton extends StatelessWidget {
   final String title;
-  final Color? backgroundColor;
-  final Color? textColor;
   final void Function() onPressed;
 
   const MySmallButton(
     this.title, {
     Key? key,
     required this.onPressed,
-    this.backgroundColor,
-    this.textColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Color? effectiveBackgroundColor = backgroundColor;
-    if (backgroundColor == null) {
-      effectiveBackgroundColor = Theme.of(context).colorScheme.primary;
-    }
-    Color? effectiveTextColor = backgroundColor;
-    if (textColor == null) {
-      effectiveTextColor = Theme.of(context).colorScheme.onPrimary;
-    }
-
-    return TextButton(
+    return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(effectiveBackgroundColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18.0),
-          ))),
-      child: Text(
-        title,
-        style: TextStyle(color: effectiveTextColor),
-      ),
+        borderRadius: BorderRadius.circular(18.0),
+      ))),
+      child: Text(title),
     );
   }
 }

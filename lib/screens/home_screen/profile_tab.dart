@@ -40,7 +40,7 @@ class _MyProfileTabState extends State<MyProfileTab> {
           children: [
             Container(
               height: 100,
-              color: Theme.of(context).colorScheme.background,
+              // color: theme.colorScheme.background,
             ),
             Align(
               alignment: Alignment.centerRight,
@@ -141,19 +141,14 @@ class _MyProfileTabState extends State<MyProfileTab> {
         children: [
           StreamBuilder(
             stream: selfUserDataStream,
-            builder: (BuildContext context, AsyncSnapshot<UserData> snapshot) {
-              if (snapshot.hasData && snapshot.data != null) {
-                return buildProfileSection(snapshot.data!);
-              } else {
-                return buildProfileSection(
+            builder: (BuildContext context, AsyncSnapshot<UserData> snapshot) =>
+                buildProfileSection(
+              snapshot.data ??
                   UserData(
-                    username: "",
-                    handle: "@handle",
-                    joinedDate: Timestamp.now(),
-                  ),
-                );
-              }
-            },
+                      username: "",
+                      handle: "@handle",
+                      joinedDate: Timestamp.now()),
+            ),
           ),
           buildActivitiesSection(),
         ],
