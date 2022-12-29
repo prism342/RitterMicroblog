@@ -21,8 +21,8 @@ class _MyProfileTabState extends State<MyProfileTab> {
   }
 
   Widget buildProfileSection(UserData userData) {
-    final profileTextColor = Theme.of(context).textTheme.caption?.color;
-    final profileTextStyle = TextStyle(color: profileTextColor);
+    final theme = Theme.of(context);
+
     int followers = 0;
     int following = 0;
 
@@ -58,41 +58,39 @@ class _MyProfileTabState extends State<MyProfileTab> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(userData.username ?? "",
-                      style: Theme.of(context).textTheme.headline5),
+                      style: theme.textTheme.titleMedium),
                   Text(
                     "@${userData.handle ?? ""}",
-                    style: TextStyle(
-                        color: Theme.of(context).textTheme.caption?.color),
+                    style: theme.textTheme.labelMedium,
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
                       Icon(
                         Icons.calendar_month_rounded,
-                        color: Theme.of(context).textTheme.caption?.color,
+                        color: theme.textTheme.labelMedium?.color,
                         size: 20,
                       ),
                       Text(
                         "  $joinedDateStr",
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.caption?.color),
+                        style: theme.textTheme.labelMedium,
                       ),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Text("$followers"),
+                      Text("$followers", style: theme.textTheme.bodyMedium),
                       Text(
                         " Followers",
-                        style: profileTextStyle,
+                        style: theme.textTheme.labelMedium,
                       ),
                       Text(
                         "   ",
-                        style: profileTextStyle,
+                        style: theme.textTheme.bodyMedium,
                       ),
-                      Text("$following"),
-                      Text(" Following", style: profileTextStyle)
+                      Text("$following", style: theme.textTheme.bodyMedium),
+                      Text(" Following", style: theme.textTheme.labelMedium)
                     ],
                   ),
                 ],
@@ -112,6 +110,8 @@ class _MyProfileTabState extends State<MyProfileTab> {
   }
 
   Widget buildActivitiesSection() {
+    final theme = Theme.of(context);
+
     return Column(
       children: [
         Padding(
@@ -119,7 +119,7 @@ class _MyProfileTabState extends State<MyProfileTab> {
           child: Row(children: [
             Text(
               "Activities",
-              style: Theme.of(context).textTheme.titleMedium,
+              style: theme.textTheme.titleMedium,
             )
           ]),
         ),

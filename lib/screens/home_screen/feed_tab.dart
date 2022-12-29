@@ -45,6 +45,8 @@ class _MyFeedTabState extends State<MyFeedTab> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         // leading: Text("Profile Pic"),
@@ -52,7 +54,9 @@ class _MyFeedTabState extends State<MyFeedTab> {
         centerTitle: true,
         elevation: 2,
       ),
-      body: StreamBuilder(stream: myFeedStream, builder: postListBuilder),
+      body: Container(
+          color: theme.colorScheme.background,
+          child: StreamBuilder(stream: myFeedStream, builder: postListBuilder)),
     );
   }
 }

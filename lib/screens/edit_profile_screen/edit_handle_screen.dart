@@ -46,26 +46,32 @@ class _MyEditHandleScreenState extends State<MyEditHandleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Edit Username")),
+      appBar: AppBar(title: const Text("Edit Handle")),
       body: Padding(
         padding: const EdgeInsets.only(top: 12.0, left: 24.0, right: 24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("HANDLE"),
-            SizedBox(height: 4),
+            Text(
+              "Handle",
+              style: theme.textTheme.titleSmall,
+            ),
+            const SizedBox(height: 4),
             TextField(
+              style: theme.textTheme.bodyMedium,
               controller: _handleController,
               focusNode: myFocusNode,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 // icon: Icon(Icons.person),
-                border: const OutlineInputBorder(
+                border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12))),
                 isDense: true,
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             MyAuthButton(lable: "Save", onPressed: onSaveButtonPressed)
           ],
         ),

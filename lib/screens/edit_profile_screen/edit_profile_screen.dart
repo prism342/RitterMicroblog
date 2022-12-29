@@ -22,16 +22,22 @@ class _MyEditProfileScreenState extends State<MyEditProfileScreen> {
 
   Widget buildTile(String title, Widget? content, void Function() onTap,
       {Widget trailing = const Icon(Icons.keyboard_arrow_right_rounded)}) {
+    final theme = Theme.of(context);
+
     return Column(
       children: [
         ListTile(
-          title: content == null
-              ? Text(title)
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [Text(title), content],
-                ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: theme.textTheme.bodyMedium,
+              ),
+              content ?? Container()
+            ],
+          ),
           trailing: trailing,
           onTap: onTap,
         ),
@@ -45,6 +51,8 @@ class _MyEditProfileScreenState extends State<MyEditProfileScreen> {
 
   Widget streamViewBuilder(
       BuildContext context, AsyncSnapshot<UserData> snapshot) {
+    final theme = Theme.of(context);
+
     if (snapshot.hasError) {
       return const Text('Something went wrong');
     }
@@ -88,8 +96,7 @@ class _MyEditProfileScreenState extends State<MyEditProfileScreen> {
             "Username",
             Text(
               snapshot.data!.username ?? "",
-              style:
-                  TextStyle(color: Theme.of(context).textTheme.caption?.color),
+              style: theme.textTheme.labelMedium,
             ), () {
           Navigator.push(
             context,
@@ -103,8 +110,7 @@ class _MyEditProfileScreenState extends State<MyEditProfileScreen> {
             "Handle",
             Text(
               snapshot.data!.handle ?? "",
-              style:
-                  TextStyle(color: Theme.of(context).textTheme.caption?.color),
+              style: theme.textTheme.labelMedium,
             ), () {
           Navigator.push(
             context,
@@ -118,8 +124,7 @@ class _MyEditProfileScreenState extends State<MyEditProfileScreen> {
             "Email Address",
             Text(
               getSelfEmail() ?? "",
-              style:
-                  TextStyle(color: Theme.of(context).textTheme.caption?.color),
+              style: theme.textTheme.labelMedium,
             ),
             () {},
             trailing: const Icon(Icons.lock_outline_rounded)),

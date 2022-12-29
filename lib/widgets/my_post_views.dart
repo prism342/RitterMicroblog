@@ -42,7 +42,12 @@ class _MyPostCardViewState extends State<MyPostCardView> {
     return Container(
       margin: const EdgeInsets.only(top: 8, left: 8, right: 8),
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      color: Theme.of(context).cardColor,
+      decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
+          border: Border.all(
+            color: Theme.of(context).cardColor,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(8))),
       // decoration: ,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,35 +57,28 @@ class _MyPostCardViewState extends State<MyPostCardView> {
               MyProfilePic(
                 url: widget.creator.profilePicUrl,
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       widget.creator.username ?? "",
-                      style: TextStyle(
-                        fontSize: theme.textTheme.bodyLarge?.fontSize,
-                        color: theme.textTheme.bodyMedium?.color,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: theme.textTheme.titleSmall,
                     ),
                     Row(
                       children: [
                         Text(
-                          "@${widget.creator.handle}",
-                          style: TextStyle(
-                              fontSize: theme.textTheme.bodyLarge?.fontSize,
-                              color: theme.textTheme.caption?.color),
+                          (widget.creator.handle != null)
+                              ? "@${widget.creator.handle}"
+                              : "",
+                          style: theme.textTheme.labelMedium,
                         ),
                         Expanded(
                           child: Container(
                             alignment: Alignment.centerRight,
                             child: Text("1s ago",
-                                style: TextStyle(
-                                    fontSize:
-                                        theme.textTheme.bodyLarge?.fontSize,
-                                    color: theme.textTheme.caption?.color)),
+                                style: theme.textTheme.labelMedium),
                           ),
                         )
                       ],
@@ -90,19 +88,19 @@ class _MyPostCardViewState extends State<MyPostCardView> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Text(widget.post.postContent),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
+          Text(widget.post.postContent, style: theme.textTheme.bodyMedium),
+          const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GestureDetector(
                 onTap: onCommentButtonPressed,
-                child: Icon(Icons.messenger, color: theme.hintColor),
+                child: Icon(Icons.messenger, color: Colors.grey.shade600),
               ),
               GestureDetector(
                   onTap: onRepostButtonPressed,
-                  child: Icon(Icons.reply_all, color: theme.hintColor)),
+                  child: Icon(Icons.reply_all, color: Colors.grey.shade600)),
               GestureDetector(
                   onTap: onLikeButtonPressed,
                   child: StreamBuilder(
@@ -110,11 +108,11 @@ class _MyPostCardViewState extends State<MyPostCardView> {
                     builder: (context, snapshot) => Icon(Icons.favorite,
                         color: snapshot.data == true
                             ? Colors.red
-                            : theme.hintColor),
+                            : Colors.grey.shade600),
                   )),
               GestureDetector(
                   onTap: onShareButtonPressed,
-                  child: Icon(Icons.share, color: theme.hintColor))
+                  child: Icon(Icons.share, color: Colors.grey.shade600))
             ],
           ),
           const SizedBox(height: 8),

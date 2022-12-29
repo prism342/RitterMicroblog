@@ -46,6 +46,8 @@ class _MyEditUsernameScreenState extends State<MyEditUsernameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text("Edit Username")),
       body: Padding(
@@ -53,19 +55,22 @@ class _MyEditUsernameScreenState extends State<MyEditUsernameScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("USERNAME"),
-            SizedBox(height: 4),
+            Text(
+              "Username",
+              style: theme.textTheme.titleSmall,
+            ),
+            const SizedBox(height: 4),
             TextField(
+              style: theme.textTheme.bodyMedium,
               controller: _usernameController,
               focusNode: myFocusNode,
-              decoration: InputDecoration(
-                // icon: Icon(Icons.person),
-                border: const OutlineInputBorder(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(12))),
                 isDense: true,
               ),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             MyAuthButton(lable: "Save", onPressed: onSaveButtonPressed)
           ],
         ),

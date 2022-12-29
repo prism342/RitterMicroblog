@@ -54,7 +54,7 @@ class _MySignupScreenState extends State<MySignupScreen> {
 
       sendVerificationEmail();
 
-      String uid = getSelfUid() ?? "";
+      String uid = getSelfUid();
       updateSelfProfileData(
         UserData(
             username: _usernameController.text,
