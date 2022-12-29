@@ -22,18 +22,9 @@ class _MyFeedTabState extends State<MyFeedTab> {
       final feeds = snapshot.data!;
       return ListView.builder(
           itemCount: feeds.length,
-          itemBuilder: (context, index) {
-            if (feeds[index] == null) {
-              return Container();
-            } else {
-              return FutureBuilder<UserData>(
-                  future: getUserDataByID(feeds[index]!.creatorID),
-                  builder: (context, snapshot) => MyPostCardView(
-                        post: feeds[index]!,
-                        creator: snapshot.data ?? UserData(),
-                      ));
-            }
-          });
+          itemBuilder: (context, index) => (feeds[index] == null)
+              ? Container()
+              : MyPostCardView(post: feeds[index]!));
     } else {
       return Container(
         alignment: Alignment.topCenter,

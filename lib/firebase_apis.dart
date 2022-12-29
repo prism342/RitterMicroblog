@@ -202,6 +202,27 @@ Future<void> createRepost(String refPostID) async {
 //   }
 // }
 
+// Future<bool> isPostLiked(String postID) async {
+//   final likeQuerySnap = await likeCol
+//       .where("refPostID", isEqualTo: postID)
+//       .where("creatorID", isEqualTo: getSelfUid())
+//       .limit(1)
+//       .get();
+//   final isLiked = likeQuerySnap.docs.isNotEmpty;
+//   return isLiked;
+// }
+
+Stream<bool> isPostlikedStream(String postID) {
+  final likeQuerySnapStream = likeCol
+      .where("refPostID", isEqualTo: postID)
+      .where("creatorID", isEqualTo: getSelfUid())
+      .limit(1)
+      .snapshots();
+  final likeStream =
+      likeQuerySnapStream.map((querySnap) => querySnap.docs.isNotEmpty);
+  return likeStream;
+}
+
 Future<void> togglePostLike(String postID) async {
   final likeQuerySnap = await likeCol
       .where("refPostID", isEqualTo: postID)
@@ -222,23 +243,75 @@ Future<void> togglePostLike(String postID) async {
   }
 }
 
-Future<bool> isPostLiked(String postID) async {
-  final likeQuerySnap = await likeCol
-      .where("refPostID", isEqualTo: postID)
-      .where("creatorID", isEqualTo: getSelfUid())
-      .limit(1)
-      .get();
-  final isLiked = likeQuerySnap.docs.isNotEmpty;
-  return isLiked;
-}
-
-Stream<bool> isPostlikedStream(String postID) {
-  final likeQuerySnapStream = likeCol
+Stream<bool> isPostRepostedStream(String postID) {
+  final repostQuerySnapStream = repostCol
       .where("refPostID", isEqualTo: postID)
       .where("creatorID", isEqualTo: getSelfUid())
       .limit(1)
       .snapshots();
-  final likeStream =
-      likeQuerySnapStream.map((querySnap) => querySnap.docs.isNotEmpty);
-  return likeStream;
+  final repostStream =
+      repostQuerySnapStream.map((querySnap) => querySnap.docs.isNotEmpty);
+  return repostStream;
+}
+
+Future<void> togglePostRepost(String postID) async {
+  final repostQuerySnap = await repostCol
+      .where("refPostID", isEqualTo: postID)
+      .where("creatorID", isEqualTo: getSelfUid())
+      .get();
+  if (repostQuerySnap.docs.isNotEmpty) {
+    for (var docSnap in repostQuerySnap.docs) {
+      repostCol.doc(docSnap.id).delete();
+    }
+  } else {
+    final repostActivity = RepostActivity(
+      creatorID: getSelfUid(),
+      timestamp: Timestamp.now(),
+      refPostID: postID,
+    );
+
+    await repostCol.add(repostActivity.toMap());
+  }
+}
+
+Stream<bool> isPostCommentedStream(String postID) {
+  final commentQuerySnapStream = commentCol
+      .where("refPostID", isEqualTo: postID)
+      .where("creatorID", isEqualTo: getSelfUid())
+      .limit(1)
+      .snapshots();
+  final isCommentedStream =
+      commentQuerySnapStream.map((querySnap) => querySnap.docs.isNotEmpty);
+  return isCommentedStream;
+}
+
+Stream<List<CommentActivity?>> getPostCommentsStream(String postID) {
+  final commentQuerySnapStream =
+      commentCol.where("refPostID", isEqualTo: postID).snapshots();
+  final commentsStream = commentQuerySnapStream.map(
+    (querySnap) => querySnap.docs
+        .map((docSnap) => CommentActivity.fromMap(docSnap.id, docSnap.data()))
+        .toList(),
+  );
+  return commentsStream;
+}
+
+Stream<int> getNumberOfLikesStream(String postID) {
+  final queryStream = likeCol.where("refPostID", isEqualTo: postID).snapshots();
+  final likesStream = queryStream.map((querySnap) => querySnap.docs.length);
+  return likesStream;
+}
+
+Stream<int> getNumberOfCommentsStream(String postID) {
+  final queryStream =
+      commentCol.where("refPostID", isEqualTo: postID).snapshots();
+  final likesStream = queryStream.map((querySnap) => querySnap.docs.length);
+  return likesStream;
+}
+
+Stream<int> getNumberOfRepostsStream(String postID) {
+  final queryStream =
+      repostCol.where("refPostID", isEqualTo: postID).snapshots();
+  final likesStream = queryStream.map((querySnap) => querySnap.docs.length);
+  return likesStream;
 }
