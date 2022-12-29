@@ -14,22 +14,28 @@ class MyFeedTab extends StatefulWidget {
 }
 
 class _MyFeedTabState extends State<MyFeedTab> {
-  final myFeedsFuture = getLatestFeed();
+  final myFeedStream = getLatestFeedStream();
 
-  Widget postListBuilder(BuildContext context,
-      AsyncSnapshot<List<Tuple2<Post, UserData>>> snapshot) {
+  Widget postListBuilder(
+      BuildContext context, AsyncSnapshot<List<PostActivity?>> snapshot) {
     if (snapshot.hasData && snapshot.data != null) {
       final feeds = snapshot.data!;
       return ListView.builder(
           itemCount: feeds.length,
           itemBuilder: (context, index) {
-            return MyPostCardView(
-              post: feeds[index].item1,
-              creator: feeds[index].item2,
-              isCommented: false,
-              isReposted: false,
-              isFavorited: false,
-            );
+            if (feeds[index] == null) {
+              return Container();
+            } else {
+              return FutureBuilder<UserData>(
+                  future: getUserDataByID(feeds[index]!.creatorID),
+                  builder: (context, snapshot) => MyPostCardView(
+                        post: feeds[index]!,
+                        creator: snapshot.data ?? UserData(),
+                        isCommented: false,
+                        isReposted: false,
+                        isFavorited: false,
+                      ));
+            }
           });
     } else {
       return Container(
@@ -49,7 +55,7 @@ class _MyFeedTabState extends State<MyFeedTab> {
         centerTitle: true,
         elevation: 2,
       ),
-      body: FutureBuilder(future: myFeedsFuture, builder: postListBuilder),
+      body: StreamBuilder(stream: myFeedStream, builder: postListBuilder),
     );
   }
 }

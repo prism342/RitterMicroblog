@@ -8,7 +8,7 @@ import 'package:ritter_microblog/data_models.dart';
 import 'package:tuple/tuple.dart';
 
 final userDataCol = FirebaseFirestore.instance.collection('userProfile');
-final postsCol = FirebaseFirestore.instance.collection('posts');
+final postCol = FirebaseFirestore.instance.collection('post');
 final commentCol = FirebaseFirestore.instance.collection('comment');
 final repostCol = FirebaseFirestore.instance.collection('repost');
 final likeCol = FirebaseFirestore.instance.collection('like');
@@ -57,23 +57,6 @@ Future<void> uploadProfilePic(String localPath) async {
   updateSelfProfileData(UserData(profilePicUrl: imageUrl));
 }
 
-// Future<String?> getProfilePicUrl() async {
-//   String? url;
-
-//   String uid = getSelfUid() ?? "";
-
-//   try {
-//     url = await FirebaseStorage.instance
-//         .ref()
-//         .child('user/$uid/profile-picture.png')
-//         .getDownloadURL();
-//   } on FirebaseException catch (e) {
-//     log(e.message.toString());
-//   }
-
-//   return url;
-// }
-
 Stream<UserData> getUserProfileDataStream(String uid) {
   var selfUserDataSnapshotStream = userDataCol.doc(uid).snapshots();
 
@@ -105,30 +88,30 @@ String? getSelfUid() {
   return FirebaseAuth.instance.currentUser?.uid;
 }
 
-Future<void> createPost(String textContent, List<String> localImages) async {
+Future<void> createPost(String postContent, List<String> localImages) async {
   // create post doc
-  final doc = postsCol.doc();
+  final doc = postCol.doc();
 
   // upload images
-  List<String> imageURLs = [];
+  List<String> postImageURLs = [];
   for (int i = 0; i < localImages.length; i++) {
-    imageURLs.add(await uploadImage(
+    postImageURLs.add(await uploadImage(
         localImages[i], "user/${getSelfUid()}/posts/${doc.id}/$i"));
   }
 
   // create post object
-  final post = Post(
-      creatorID: getSelfUid(),
+  final post = PostActivity(
+      creatorID: getSelfUid()!,
       timestamp: Timestamp.now(),
-      textContent: textContent,
-      imageURLs: imageURLs);
+      postContent: postContent,
+      postImageURLs: postImageURLs);
 
-  await doc.set(post.toData());
+  await doc.set(post.toMap());
 }
 
-Future<Post> getPostByID(String docID) async {
-  final snap = await postsCol.doc(docID).get();
-  return Post.fromData(docID, snap.data());
+Future<PostActivity?> getPostByID(String docID) async {
+  final snap = await postCol.doc(docID).get();
+  return PostActivity.fromMap(docID, snap.data());
 }
 
 Future<UserData> getUserDataByID(String docID) async {
@@ -136,32 +119,33 @@ Future<UserData> getUserDataByID(String docID) async {
   return UserData.fromData(docID, snap.data());
 }
 
-// Stream<List<Post>> getFeed() async {
-//   final querySnapStream =
-//       postsCol.where("creatorID", isEqualTo: getSelfUid()).snapshots();
+// Future<List<Tuple2<PostActivity, UserData>>> getLatestFeed() async {
+//   final List<Tuple2<PostActivity, UserData>> feeds = [];
 
-//   final posts = querySnapStream
-//       .map((querySnap) => querySnap.docs.map((docSnap) => docSnap.data()))
-//       ;
+//   final querySnap =
+//       await postCol.where("creatorID", isEqualTo: getSelfUid()).get();
 
-//   return Stream<List<Post>>;
+//   final docSnaps = querySnap.docs;
+
+//   for (final docSnap in docSnaps) {
+//     final post = PostActivity.fromMap(docSnap.id, docSnap.data());
+//     if (post == null) continue;
+//     final creator = await getUserDataByID(post.creatorID);
+//     feeds.add(Tuple2(post, creator));
+//   }
+
+//   return feeds;
 // }
 
-Future<List<Tuple2<Post, UserData>>> getLatestFeed() async {
-  final List<Tuple2<Post, UserData>> feeds = [];
+Stream<List<PostActivity?>> getLatestFeedStream() {
+  final querySnapStream =
+      postCol.where("creatorID", isEqualTo: getSelfUid()).snapshots();
 
-  final querySnap =
-      await postsCol.where("creatorID", isEqualTo: getSelfUid()).get();
+  final docsStream = querySnapStream.map((querySnap) => querySnap.docs
+      .map((docSnap) => PostActivity.fromMap(docSnap.id, docSnap.data()))
+      .toList());
 
-  final docSnaps = querySnap.docs;
-
-  for (final docSnap in docSnaps) {
-    final post = Post.fromData(docSnap.id, docSnap.data());
-    final creator = await getUserDataByID(post.creatorID ?? "");
-    feeds.add(Tuple2(post, creator));
-  }
-
-  return feeds;
+  return docsStream;
 }
 
 Future<void> createPostActivity(
@@ -172,7 +156,7 @@ Future<void> createPostActivity(
       postContent: postContent,
       postImageURLs: []);
 
-  await postsCol.add(post.toMap());
+  await postCol.add(post.toMap());
 }
 
 Future<void> createComment(String refPostID, String comment) async {
@@ -195,6 +179,8 @@ Future<void> createRepost(String refPostID) async {
 }
 
 Future<void> createLike(String refPostID) async {
+  // TODO: Check if already liked.
+
   final likeActivity = LikeActivity(
       creatorID: getSelfUid()!,
       timestamp: Timestamp.now(),

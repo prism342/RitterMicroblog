@@ -1,12 +1,15 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ritter_microblog/firebase_apis.dart';
 import 'package:ritter_microblog/widgets/my_images.dart';
+import 'package:ritter_microblog/widgets/toast.dart';
 
 import '../data_models.dart';
 
 class MyPostCardView extends StatefulWidget {
-  final Post post;
+  final PostActivity post;
   final UserData creator;
   final bool isCommented;
   final bool isReposted;
@@ -26,10 +29,19 @@ class MyPostCardView extends StatefulWidget {
 
 class _MyPostCardViewState extends State<MyPostCardView> {
   void onPostBodyPressed() {}
+
   void onProfileInfoPressed() {}
+
   void onCommentButtonPressed() {}
+
   void onRepostButtonPressed() {}
-  void onLikeButtonPressed() {}
+
+  void onLikeButtonPressed() async {
+    if (widget.post.docID != null) {
+      await createLike(widget.post.docID!);
+    }
+  }
+
   void onShareButtonPressed() {}
 
   @override
@@ -88,7 +100,7 @@ class _MyPostCardViewState extends State<MyPostCardView> {
             ],
           ),
           const SizedBox(height: 16),
-          Text(widget.post.textContent ?? ""),
+          Text(widget.post.postContent ?? ""),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
