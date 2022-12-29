@@ -84,8 +84,8 @@ String? getSelfEmail() {
   return FirebaseAuth.instance.currentUser?.email;
 }
 
-String? getSelfUid() {
-  return FirebaseAuth.instance.currentUser?.uid;
+String getSelfUid() {
+  return FirebaseAuth.instance.currentUser?.uid ?? "";
 }
 
 Future<void> createPost(String postContent, List<String> localImages) async {
@@ -101,7 +101,7 @@ Future<void> createPost(String postContent, List<String> localImages) async {
 
   // create post object
   final post = PostActivity(
-      creatorID: getSelfUid()!,
+      creatorID: getSelfUid(),
       timestamp: Timestamp.now(),
       postContent: postContent,
       postImageURLs: postImageURLs);
@@ -151,7 +151,7 @@ Stream<List<PostActivity?>> getLatestFeedStream() {
 Future<void> createPostActivity(
     String postContent, List<String> localImagePaths) async {
   final post = PostActivity(
-      creatorID: getSelfUid()!,
+      creatorID: getSelfUid(),
       timestamp: Timestamp.now(),
       postContent: postContent,
       postImageURLs: []);
@@ -161,7 +161,7 @@ Future<void> createPostActivity(
 
 Future<void> createComment(String refPostID, String comment) async {
   final commentActivity = CommentActivity(
-      creatorID: getSelfUid()!,
+      creatorID: getSelfUid(),
       timestamp: Timestamp.now(),
       refPostID: refPostID,
       comment: comment);
@@ -171,20 +171,74 @@ Future<void> createComment(String refPostID, String comment) async {
 
 Future<void> createRepost(String refPostID) async {
   final repostActivity = RepostActivity(
-      creatorID: getSelfUid()!,
+      creatorID: getSelfUid(),
       timestamp: Timestamp.now(),
       refPostID: refPostID);
 
   await repostCol.add(repostActivity.toMap());
 }
 
-Future<void> createLike(String refPostID) async {
-  // TODO: Check if already liked.
+// Future<void> createLike(String refPostID) async {
+//   if (await isPostLiked(refPostID)) {
+//     return;
+//   } else {
+//     final likeActivity = LikeActivity(
+//         creatorID: getSelfUid(),
+//         timestamp: Timestamp.now(),
+//         refPostID: refPostID);
 
-  final likeActivity = LikeActivity(
-      creatorID: getSelfUid()!,
+//     await likeCol.add(likeActivity.toMap());
+//   }
+// }
+
+// Future<void> removeLike(String postID) async {
+//   final likeQuerySnap = await likeCol
+//       .where("refPostID", isEqualTo: postID)
+//       .where("creatorID", isEqualTo: getSelfUid())
+//       .limit(1)
+//       .get();
+//   if (likeQuerySnap.docs.isNotEmpty) {
+//     await likeCol.doc(likeQuerySnap.docs.first.id).delete();
+//   }
+// }
+
+Future<void> togglePostLike(String postID) async {
+  final likeQuerySnap = await likeCol
+      .where("refPostID", isEqualTo: postID)
+      .where("creatorID", isEqualTo: getSelfUid())
+      .get();
+  if (likeQuerySnap.docs.isNotEmpty) {
+    for (var docSnap in likeQuerySnap.docs) {
+      likeCol.doc(docSnap.id).delete();
+    }
+  } else {
+    final likeActivity = LikeActivity(
+      creatorID: getSelfUid(),
       timestamp: Timestamp.now(),
-      refPostID: refPostID);
+      refPostID: postID,
+    );
 
-  await likeCol.add(likeActivity.toMap());
+    await likeCol.add(likeActivity.toMap());
+  }
+}
+
+Future<bool> isPostLiked(String postID) async {
+  final likeQuerySnap = await likeCol
+      .where("refPostID", isEqualTo: postID)
+      .where("creatorID", isEqualTo: getSelfUid())
+      .limit(1)
+      .get();
+  final isLiked = likeQuerySnap.docs.isNotEmpty;
+  return isLiked;
+}
+
+Stream<bool> isPostlikedStream(String postID) {
+  final likeQuerySnapStream = likeCol
+      .where("refPostID", isEqualTo: postID)
+      .where("creatorID", isEqualTo: getSelfUid())
+      .limit(1)
+      .snapshots();
+  final likeStream =
+      likeQuerySnapStream.map((querySnap) => querySnap.docs.isNotEmpty);
+  return likeStream;
 }

@@ -31,9 +31,6 @@ class _MyFeedTabState extends State<MyFeedTab> {
                   builder: (context, snapshot) => MyPostCardView(
                         post: feeds[index]!,
                         creator: snapshot.data ?? UserData(),
-                        isCommented: false,
-                        isReposted: false,
-                        isFavorited: false,
                       ));
             }
           });

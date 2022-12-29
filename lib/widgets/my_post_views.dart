@@ -11,17 +11,8 @@ import '../data_models.dart';
 class MyPostCardView extends StatefulWidget {
   final PostActivity post;
   final UserData creator;
-  final bool isCommented;
-  final bool isReposted;
-  final bool isFavorited;
 
-  const MyPostCardView(
-      {super.key,
-      required this.post,
-      required this.creator,
-      required this.isCommented,
-      required this.isReposted,
-      required this.isFavorited});
+  const MyPostCardView({super.key, required this.post, required this.creator});
 
   @override
   State<MyPostCardView> createState() => _MyPostCardViewState();
@@ -38,7 +29,7 @@ class _MyPostCardViewState extends State<MyPostCardView> {
 
   void onLikeButtonPressed() async {
     if (widget.post.docID != null) {
-      await createLike(widget.post.docID!);
+      await togglePostLike(widget.post.docID!);
     }
   }
 
@@ -100,7 +91,7 @@ class _MyPostCardViewState extends State<MyPostCardView> {
             ],
           ),
           const SizedBox(height: 16),
-          Text(widget.post.postContent ?? ""),
+          Text(widget.post.postContent),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,7 +105,13 @@ class _MyPostCardViewState extends State<MyPostCardView> {
                   child: Icon(Icons.reply_all, color: theme.hintColor)),
               GestureDetector(
                   onTap: onLikeButtonPressed,
-                  child: Icon(Icons.favorite, color: theme.hintColor)),
+                  child: StreamBuilder(
+                    stream: isPostlikedStream(widget.post.docID ?? ""),
+                    builder: (context, snapshot) => Icon(Icons.favorite,
+                        color: snapshot.data == true
+                            ? Colors.red
+                            : theme.hintColor),
+                  )),
               GestureDetector(
                   onTap: onShareButtonPressed,
                   child: Icon(Icons.share, color: theme.hintColor))
