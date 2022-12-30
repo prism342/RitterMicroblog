@@ -61,7 +61,7 @@ Stream<UserData> getUserProfileDataStream(String uid) {
   var selfUserDataSnapshotStream = userDataCol.doc(uid).snapshots();
 
   var selfUserDataStream = selfUserDataSnapshotStream
-      .map((snapshot) => UserData.fromData(snapshot.id, snapshot.data()));
+      .map((snapshot) => UserData.fromMap(snapshot.id, snapshot.data()));
 
   return selfUserDataStream;
 }
@@ -116,7 +116,7 @@ Future<PostActivity?> getPostByID(String docID) async {
 
 Future<UserData> getUserDataByID(String docID) async {
   final snap = await userDataCol.doc(docID).get();
-  return UserData.fromData(docID, snap.data());
+  return UserData.fromMap(docID, snap.data());
 }
 
 // Future<List<Tuple2<PostActivity, UserData>>> getLatestFeed() async {
@@ -314,4 +314,26 @@ Stream<int> getNumberOfRepostsStream(String postID) {
       repostCol.where("refPostID", isEqualTo: postID).snapshots();
   final likesStream = queryStream.map((querySnap) => querySnap.docs.length);
   return likesStream;
+}
+
+Future<List<PostActivity?>> searchPosts(String keyWords) async {
+  final query = await postCol
+      .where("postContent", isGreaterThanOrEqualTo: keyWords)
+      .where("postContent", isLessThanOrEqualTo: '$keyWords\uf8ff')
+      .get();
+  final result = query.docs
+      .map((docSnap) => PostActivity.fromMap(docSnap.id, docSnap.data()))
+      .toList();
+  return result;
+}
+
+Future<List<UserData?>> searchUsers(String keyWords) async {
+  final query = await userDataCol
+      .where("username", isGreaterThanOrEqualTo: keyWords)
+      .where("username", isLessThanOrEqualTo: '$keyWords\uf8ff')
+      .get();
+  final result = query.docs
+      .map((docSnap) => UserData.fromMap(docSnap.id, docSnap.data()))
+      .toList();
+  return result;
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class MyAuthTextField extends StatelessWidget {
@@ -78,6 +80,54 @@ class _MyPasswordTextFieldState extends State<MyPasswordTextField> {
       obscureText: !_showPassword,
       suffixIcon: suffixIcon,
       padding: widget.padding,
+    );
+  }
+}
+
+class MySearchTextField extends StatefulWidget {
+  final TextEditingController textController;
+  final void Function() onSearchButtonPressed;
+
+  const MySearchTextField(
+      {super.key,
+      required this.textController,
+      required this.onSearchButtonPressed});
+
+  @override
+  State<MySearchTextField> createState() => _MySearchTextFieldState();
+}
+
+class _MySearchTextFieldState extends State<MySearchTextField> {
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      //margin: const EdgeInsets.only(top: 8, left: 8, right: 8),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      color: theme.colorScheme.surface,
+      child: TextField(
+          controller: widget.textController,
+          style: theme.textTheme.bodyMedium,
+          onSubmitted: (value) {
+            widget.onSearchButtonPressed();
+          },
+          decoration: InputDecoration(
+            // icon: Icon(Icons.person),
+            suffixIcon: GestureDetector(
+              onTap: widget.onSearchButtonPressed,
+              child: Icon(
+                Icons.search_rounded,
+                size: 22,
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(12))),
+            hintText: "Search...",
+            hintStyle: theme.textTheme.labelMedium,
+            isDense: true,
+          )),
     );
   }
 }

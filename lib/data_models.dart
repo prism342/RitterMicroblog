@@ -18,7 +18,7 @@ class UserData extends Object {
       this.joinedDate,
       this.profilePicUrl});
 
-  factory UserData.fromData(String docID, Map<String, dynamic>? data) {
+  factory UserData.fromMap(String docID, Map<String, dynamic>? data) {
     if (data == null) {
       return UserData();
     }

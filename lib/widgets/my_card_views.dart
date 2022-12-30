@@ -302,3 +302,74 @@ class _MyPostCardState extends State<MyPostCard> {
     );
   }
 }
+
+class MyUserProfileCard extends StatefulWidget {
+  final UserData userData;
+  final WidgetSize size;
+
+  const MyUserProfileCard(
+      {super.key, required this.userData, required this.size});
+
+  @override
+  State<MyUserProfileCard> createState() => _MyUserProfileCardState();
+}
+
+class _MyUserProfileCardState extends State<MyUserProfileCard> {
+  void onProfileInfoPressed() {}
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    late final double profileRadius;
+    late final TextStyle? usernameStyle;
+    late final TextStyle? handleStyle;
+
+    switch (widget.size) {
+      case WidgetSize.large:
+        profileRadius = 30;
+        usernameStyle = theme.textTheme.titleMedium;
+        handleStyle = theme.textTheme.labelLarge;
+        break;
+      case WidgetSize.medium:
+        profileRadius = 25;
+        usernameStyle = theme.textTheme.titleSmall;
+        handleStyle = theme.textTheme.labelMedium;
+        break;
+      case WidgetSize.small:
+        profileRadius = 20;
+        usernameStyle = theme.textTheme.titleSmall;
+        handleStyle = theme.textTheme.labelSmall;
+        break;
+    }
+
+    return Container(
+      // margin: const EdgeInsets.only(top: 8, left: 8, right: 8),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      color: theme.colorScheme.surface,
+      child: Row(
+        children: [
+          MyProfilePic(
+            radius: profileRadius,
+            url: widget.userData.profilePicUrl,
+          ),
+          const SizedBox(width: 8),
+          Column(
+            children: [
+              Text(
+                widget.userData.username ?? "",
+                style: usernameStyle,
+              ),
+              Text(
+                (widget.userData.handle == null)
+                    ? ""
+                    : "@${widget.userData.handle}",
+                style: handleStyle,
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}

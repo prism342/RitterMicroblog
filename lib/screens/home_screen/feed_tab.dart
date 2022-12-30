@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ritter_microblog/firebase_apis.dart';
-import 'package:ritter_microblog/widgets/my_post_views.dart';
+import 'package:ritter_microblog/widgets/my_card_views.dart';
 import 'package:tuple/tuple.dart';
 
 import '../../data_models.dart';
