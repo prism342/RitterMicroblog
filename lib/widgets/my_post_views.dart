@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ritter_microblog/firebase_apis.dart';
+import 'package:ritter_microblog/screens/post_detail_screen.dart';
 import 'package:ritter_microblog/widgets/my_images.dart';
 import 'package:ritter_microblog/widgets/toast.dart';
 
@@ -23,6 +24,8 @@ class MyProfileWidget extends StatefulWidget {
 }
 
 class _MyProfileWidgetState extends State<MyProfileWidget> {
+  void onProfileInfoPressed() {}
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -46,7 +49,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       case WidgetSize.small:
         profileRadius = 20;
         usernameStyle = theme.textTheme.titleSmall;
-        handleStyle = theme.textTheme.labelMedium;
+        handleStyle = theme.textTheme.labelSmall;
         break;
     }
 
@@ -89,14 +92,34 @@ class MyCommentIconButton extends StatefulWidget {
 }
 
 class _MyCommentIconButtonState extends State<MyCommentIconButton> {
-  void onCommentButtonPressed() {}
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onCommentButtonPressed,
-      child: Icon(Icons.messenger, color: Colors.grey.shade600),
-    );
+    final theme = Theme.of(context);
+
+    if (widget.postID == null) {
+      return Icon(Icons.messenger, color: Colors.grey.shade600);
+    } else {
+      return Row(
+        children: [
+          StreamBuilder(
+            stream: isPostCommentedStream(widget.postID!),
+            builder: (context, snapshot) => Icon(Icons.messenger_rounded,
+                color: snapshot.data == true
+                    ? theme.colorScheme.primary
+                    : Colors.grey.shade600),
+          ),
+          StreamBuilder(
+            stream: getNumberOfCommentsStream(widget.postID!),
+            builder: (context, snapshot) => Text(
+              " ${((snapshot.data ?? 0) == 0) ? '' : snapshot.data}",
+              style: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: theme.textTheme.bodyMedium?.fontSize),
+            ),
+          )
+        ],
+      );
+    }
   }
 }
 
@@ -214,53 +237,67 @@ class MyShareIconButton extends StatelessWidget {
   }
 }
 
-class MyPostCardView extends StatefulWidget {
+class MyPostCard extends StatefulWidget {
   final PostActivity post;
+  final bool disableNavigation;
 
-  const MyPostCardView({super.key, required this.post});
+  const MyPostCard(
+      {super.key, required this.post, this.disableNavigation = false});
 
   @override
-  State<MyPostCardView> createState() => _MyPostCardViewState();
+  State<MyPostCard> createState() => _MyPostCardState();
 }
 
-class _MyPostCardViewState extends State<MyPostCardView> {
-  void onPostBodyPressed() {}
-
-  void onProfileInfoPressed() {}
+class _MyPostCardState extends State<MyPostCard> {
+  void onPostBodyPressed() {
+    if (!widget.disableNavigation) {
+      Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => MyPostDetailScreen(
+            post: widget.post,
+          ),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      margin: const EdgeInsets.only(top: 8, left: 8, right: 8),
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          border: Border.all(
+    return GestureDetector(
+      onTap: onPostBodyPressed,
+      child: Container(
+        margin: const EdgeInsets.only(top: 8, left: 8, right: 8),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(8))),
-      // decoration: ,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MyProfileWidget(
-              userID: widget.post.creatorID, size: WidgetSize.medium),
-          const SizedBox(height: 24),
-          Text(widget.post.postContent, style: theme.textTheme.bodyMedium),
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              MyCommentIconButton(postID: widget.post.docID),
-              MyRepostIconButton(postID: widget.post.docID),
-              MyLikeIconButton(postID: widget.post.docID),
-              MyShareIconButton(post: widget.post),
-            ],
-          ),
-          const SizedBox(height: 8),
-        ],
+            border: Border.all(
+              color: Theme.of(context).cardColor,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(8))),
+        // decoration: ,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            MyProfileWidget(
+                userID: widget.post.creatorID, size: WidgetSize.medium),
+            const SizedBox(height: 24),
+            Text(widget.post.postContent, style: theme.textTheme.bodyLarge),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MyCommentIconButton(postID: widget.post.docID),
+                MyRepostIconButton(postID: widget.post.docID),
+                MyLikeIconButton(postID: widget.post.docID),
+                MyShareIconButton(post: widget.post),
+              ],
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
       ),
     );
   }

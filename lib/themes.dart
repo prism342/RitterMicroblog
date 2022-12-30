@@ -18,19 +18,23 @@ ThemeData lightTheme = ThemeData(
   ),
   textTheme: const TextTheme(
     bodyLarge: TextStyle(
-        color: Colors.black, fontSize: 18, fontWeight: FontWeight.normal),
+        color: Colors.black, fontSize: 17, fontWeight: FontWeight.normal),
     bodyMedium: TextStyle(
         color: Colors.black, fontSize: 16, fontWeight: FontWeight.normal),
     bodySmall: TextStyle(
-        color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal),
+        color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal),
+    labelLarge: TextStyle(
+        color: Colors.black45, fontSize: 17, fontWeight: FontWeight.normal),
     labelMedium: TextStyle(
         color: Colors.black45, fontSize: 16, fontWeight: FontWeight.normal),
+    labelSmall: TextStyle(
+        color: Colors.black45, fontSize: 15, fontWeight: FontWeight.normal),
     titleLarge: TextStyle(
-        color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
+        color: Colors.black, fontSize: 19, fontWeight: FontWeight.w500),
     titleMedium: TextStyle(
         color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
     titleSmall: TextStyle(
-        color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+        color: Colors.black, fontSize: 17, fontWeight: FontWeight.w500),
   ),
 );
 

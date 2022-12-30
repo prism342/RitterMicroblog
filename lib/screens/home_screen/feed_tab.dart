@@ -24,7 +24,7 @@ class _MyFeedTabState extends State<MyFeedTab> {
           itemCount: feeds.length,
           itemBuilder: (context, index) => (feeds[index] == null)
               ? Container()
-              : MyPostCardView(post: feeds[index]!));
+              : MyPostCard(post: feeds[index]!));
     } else {
       return Container(
         alignment: Alignment.topCenter,
