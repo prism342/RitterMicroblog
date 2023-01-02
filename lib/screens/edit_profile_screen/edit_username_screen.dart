@@ -36,7 +36,7 @@ class _MyEditUsernameScreenState extends State<MyEditUsernameScreen> {
 
   void onSaveButtonPressed() async {
     if (_usernameController.text != widget.defaultUsername) {
-      await updateSelfProfileData(UserData(username: _usernameController.text));
+      await updateSelfUserData(UserData(username: _usernameController.text));
     }
 
     if (mounted) {

@@ -15,7 +15,7 @@ class MyNewPostScreen extends StatefulWidget {
 }
 
 class _MyNewPostScreenState extends State<MyNewPostScreen> {
-  final selfUserDataStream = getSelfProfileDataStream();
+  final selfUserDataStream = getSelfUserDataStream();
   final contentTextController = TextEditingController();
   final selectedImageList = <String>[];
 

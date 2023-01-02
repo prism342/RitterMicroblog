@@ -14,11 +14,13 @@ class Logo extends StatelessWidget {
         children: [
           Text(
             "Ritter",
-            style: TextStyle(color: themeData.primaryColor, fontSize: 50),
+            style:
+                TextStyle(color: themeData.colorScheme.primary, fontSize: 50),
           ),
           Text(
             "Microblog",
-            style: TextStyle(color: themeData.primaryColor, fontSize: 26),
+            style:
+                TextStyle(color: themeData.colorScheme.primary, fontSize: 26),
           )
         ],
       ),

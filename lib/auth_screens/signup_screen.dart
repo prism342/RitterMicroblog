@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:ritter_microblog/data_models.dart';
 import 'package:ritter_microblog/firebase_apis.dart';
 import 'package:ritter_microblog/widgets/my_text_fields.dart';
@@ -55,7 +54,7 @@ class _MySignupScreenState extends State<MySignupScreen> {
       sendVerificationEmail();
 
       String uid = getSelfUid();
-      updateSelfProfileData(
+      createSelfUserData(
         UserData(
             username: _usernameController.text,
             handle: uid.substring(0, 8),

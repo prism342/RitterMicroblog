@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ritter_microblog/firebase_apis.dart';
@@ -29,14 +27,16 @@ class _MyVerifyEmailScreenState extends State<MyVerifyEmailScreen> {
       }
     }
 
-    void onVerifiedButtonPressed() {
-      log(FirebaseAuth.instance.currentUser!.toString(),
-          name: "email verified");
-      return;
-      if (isEmailVerified() ?? false) {
-        Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
-      } else {
+    void onVerifiedButtonPressed() async {
+      await FirebaseAuth.instance.currentUser?.reload();
+
+      if (!isEmailVerified()) {
         showMyToast("Can't verify your email.");
+      } else {
+        if (mounted) {
+          Navigator.popUntil(context, (route) => false);
+          Navigator.pushNamed(context, "/home");
+        }
       }
     }
 

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ritter_microblog/data_models.dart';
 import 'package:ritter_microblog/firebase_apis.dart';
 import 'package:ritter_microblog/widgets/my_text_fields.dart';
 import 'package:ritter_microblog/widgets/logo.dart';
@@ -43,8 +44,9 @@ class _MySigninScreenState extends State<MySigninScreen> {
 
     log(isEmailVerified().toString(), name: "email verified");
 
-    if (isEmailVerified() ?? false) {
-      Navigator.pushReplacementNamed(context, "/home");
+    if (isEmailVerified()) {
+      Navigator.popUntil(context, (route) => false);
+      Navigator.pushNamed(context, "/home");
     } else {
       Navigator.pushNamed(context, "/verify-email");
     }

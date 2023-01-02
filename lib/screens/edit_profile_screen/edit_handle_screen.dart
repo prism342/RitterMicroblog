@@ -34,7 +34,7 @@ class _MyEditHandleScreenState extends State<MyEditHandleScreen> {
 
   void onSaveButtonPressed() async {
     if (_handleController.text != widget.defaultHandle) {
-      await updateSelfProfileData(UserData(handle: _handleController.text));
+      await updateSelfUserData(UserData(handle: _handleController.text));
     }
 
     if (!mounted) {

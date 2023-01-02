@@ -14,7 +14,7 @@ class MyProfileTab extends StatefulWidget {
 }
 
 class _MyProfileTabState extends State<MyProfileTab> {
-  final selfUserDataStream = getSelfProfileDataStream();
+  final selfUserDataStream = getSelfUserDataStream();
 
   void onEditButtonPress() {
     Navigator.pushNamed(context, '/edit-profile');

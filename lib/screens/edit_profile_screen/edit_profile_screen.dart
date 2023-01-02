@@ -18,7 +18,7 @@ class MyEditProfileScreen extends StatefulWidget {
 }
 
 class _MyEditProfileScreenState extends State<MyEditProfileScreen> {
-  final selfUserDataStream = getSelfProfileDataStream();
+  final selfUserDataStream = getSelfUserDataStream();
 
   Widget buildTile(String title, Widget? content, void Function() onTap,
       {Widget trailing = const Icon(Icons.keyboard_arrow_right_rounded)}) {
