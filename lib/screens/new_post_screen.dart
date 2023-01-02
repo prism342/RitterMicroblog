@@ -40,7 +40,7 @@ class _MyNewPostScreenState extends State<MyNewPostScreen> {
         Navigator.pop(context);
       }
     } catch (e) {
-      showInfoToast("Create post failed");
+      showMyToast("Create post failed");
     }
   }
 

@@ -23,9 +23,9 @@ class _MyVerifyEmailScreenState extends State<MyVerifyEmailScreen> {
     void onResendEmailButtonPressed() async {
       try {
         await sendVerificationEmail();
-        showInfoToast("Send email sucess!");
+        showMyToast("Send email sucess!");
       } catch (e) {
-        showInfoToast("Send email failed!");
+        showMyToast("Send email failed!");
       }
     }
 
@@ -36,7 +36,7 @@ class _MyVerifyEmailScreenState extends State<MyVerifyEmailScreen> {
       if (isEmailVerified() ?? false) {
         Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
       } else {
-        showInfoToast("Can't verify your email.");
+        showMyToast("Can't verify your email.");
       }
     }
 

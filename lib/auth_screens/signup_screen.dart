@@ -33,19 +33,19 @@ class _MySignupScreenState extends State<MySignupScreen> {
           _passwordController.text,
         );
       } on FirebaseAuthException catch (e) {
-        showInfoToast(e.message ?? "An error occurred.");
+        showMyToast(e.message ?? "An error occurred.");
 
         return;
       } catch (e) {
         developer.log("Exception: ${e.toString()}",
             name: 'onSignupButtonClick');
 
-        showInfoToast("Signup failed.");
+        showMyToast("Signup failed.");
 
         return;
       }
 
-      showInfoToast("Signup success!");
+      showMyToast("Signup success!");
 
       SharedPreferences.getInstance().then((prefs) {
         prefs.setString("email", _emailController.text);

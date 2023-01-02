@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,12 +39,12 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
 
     switch (widget.size) {
       case WidgetSize.large:
-        profileRadius = 30;
+        profileRadius = 24;
         usernameStyle = theme.textTheme.titleMedium;
         handleStyle = theme.textTheme.labelLarge;
         break;
       case WidgetSize.medium:
-        profileRadius = 25;
+        profileRadius = 22;
         usernameStyle = theme.textTheme.titleSmall;
         handleStyle = theme.textTheme.labelMedium;
         break;
@@ -237,6 +239,125 @@ class MyShareIconButton extends StatelessWidget {
   }
 }
 
+class MyMenuIconButton extends StatelessWidget {
+  final PostActivity post;
+
+  const MyMenuIconButton({super.key, required this.post});
+
+  void onMenuButtonPressed() {}
+
+  @override
+  Widget build(BuildContext context) {
+    // return GestureDetector(
+    //     onTap: onMenuButtonPressed,
+    //     child: Icon(
+    //       Icons.more_horiz_sharp,
+    //       color: Colors.grey.shade600,
+    //       // size: 28,
+    //     ));
+
+    final theme = Theme.of(context);
+
+    return PopupMenuButton<int>(
+      icon: Icon(
+        Icons.more_horiz_sharp,
+        color: Colors.grey.shade600,
+        // size: 28,
+      ),
+      padding: EdgeInsets.zero,
+      offset: const Offset(0, 40),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          value: 1,
+          child: Text("Delete", style: theme.textTheme.bodyMedium),
+        ),
+        PopupMenuItem(
+          value: 2,
+          child: Text("Menu Item", style: theme.textTheme.bodyMedium),
+        ),
+      ],
+    );
+  }
+}
+
+class MyTimePastText extends StatefulWidget {
+  final WidgetSize size;
+  final DateTime date;
+
+  const MyTimePastText({super.key, required this.date, required this.size});
+
+  @override
+  State<MyTimePastText> createState() => _MyTimePastTextState();
+}
+
+class _MyTimePastTextState extends State<MyTimePastText> {
+  late String timePast;
+  late final Timer timer;
+
+  String getTimePastString(DateTime date) {
+    final currentDate = DateTime.now();
+    final dateDiff = currentDate.difference(date);
+
+    final yearDiff = (dateDiff.inDays / 365).floor();
+    if (yearDiff > 0) {
+      return "${yearDiff}y ago";
+    }
+
+    final monthDiff = (dateDiff.inDays / 30.5).floor();
+    if (monthDiff > 0) {
+      return "${monthDiff}m ago";
+    }
+
+    final daysDiff = dateDiff.inDays;
+    if (daysDiff > 0) {
+      return "${daysDiff}d ago";
+    }
+
+    final hoursDiff = dateDiff.inHours % 24;
+    if (hoursDiff > 0) {
+      return "${hoursDiff}h ago";
+    }
+
+    final minutesDiff = dateDiff.inMinutes % 60;
+    if (minutesDiff > 0) {
+      return "${minutesDiff}min ago";
+    }
+
+    final secondsDiff = dateDiff.inSeconds % 60;
+    if (secondsDiff > 0) {
+      return "${secondsDiff}s ago";
+    }
+
+    return "0s ago";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    timePast = getTimePastString(widget.date);
+
+    timer = Timer.periodic(const Duration(seconds: 30), (Timer t) {
+      setState(() {
+        timePast = getTimePastString(widget.date);
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    if (widget.size == WidgetSize.large) {
+      return Text(timePast, style: theme.textTheme.labelLarge);
+    } else if (widget.size == WidgetSize.medium) {
+      return Text(timePast, style: theme.textTheme.labelMedium);
+    } else {
+      return Text(timePast, style: theme.textTheme.labelSmall);
+    }
+  }
+}
+
 class MyPostCard extends StatefulWidget {
   final PostActivity post;
   final bool disableNavigation;
@@ -281,8 +402,23 @@ class _MyPostCardState extends State<MyPostCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MyProfileWidget(
-                userID: widget.post.creatorID, size: WidgetSize.medium),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                MyProfileWidget(
+                    userID: widget.post.creatorID, size: WidgetSize.medium),
+                Row(
+                  children: [
+                    MyTimePastText(
+                      date: widget.post.timestamp.toDate(),
+                      size: WidgetSize.medium,
+                    ),
+                    const SizedBox(width: 12),
+                    MyMenuIconButton(post: widget.post)
+                  ],
+                ),
+              ],
+            ),
             const SizedBox(height: 24),
             Text(widget.post.postContent, style: theme.textTheme.bodyLarge),
             const SizedBox(height: 24),
@@ -300,6 +436,58 @@ class _MyPostCardState extends State<MyPostCard> {
         ),
       ),
     );
+  }
+}
+
+class MyCommentCard extends StatelessWidget {
+  final CommentActivity? comment;
+
+  const MyCommentCard({super.key, required this.comment});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    if (comment == null) {
+      return Container();
+    } else {
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        color: theme.colorScheme.surface,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Divider(height: 0),
+            const SizedBox(height: 18),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyProfileWidget(
+                          userID: comment!.creatorID, size: WidgetSize.small),
+                      MyTimePastText(
+                        date: comment!.timestamp.toDate(),
+                        size: WidgetSize.small,
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  Text(
+                    comment!.comment,
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                  const SizedBox(height: 18),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }
 

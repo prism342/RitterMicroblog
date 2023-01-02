@@ -1,6 +1,6 @@
 import 'package:fluttertoast/fluttertoast.dart';
 
-void showInfoToast(String message) {
+void showMyToast(String message) {
   Fluttertoast.showToast(
     msg: message,
     toastLength: Toast.LENGTH_SHORT,

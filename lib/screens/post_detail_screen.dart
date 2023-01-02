@@ -53,45 +53,6 @@ class _MyCommentTextFieldState extends State<MyCommentTextField> {
   }
 }
 
-class MyCommentCard extends StatelessWidget {
-  final CommentActivity? comment;
-
-  const MyCommentCard({super.key, required this.comment});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    if (comment == null) {
-      return Container();
-    } else {
-      return Column(
-        children: [
-          const Divider(height: 0),
-          Container(
-            margin: const EdgeInsets.only(left: 8, right: 8),
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-            color: theme.colorScheme.surface,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MyProfileWidget(
-                    userID: comment!.creatorID, size: WidgetSize.small),
-                const SizedBox(height: 12),
-                Text(
-                  comment!.comment,
-                  style: theme.textTheme.bodyMedium,
-                ),
-                // const SizedBox(height: 12),
-              ],
-            ),
-          ),
-        ],
-      );
-    }
-  }
-}
-
 class MyPostDetailScreen extends StatefulWidget {
   final PostActivity post;
 
@@ -122,12 +83,19 @@ class _MyPostDetailScreenState extends State<MyPostDetailScreen> {
             ),
             StreamBuilder(
               stream: getPostCommentsStream(widget.post.docID ?? ""),
-              builder: (context, snapshot) => Column(
-                children: snapshot.data
-                        ?.map((comment) => MyCommentCard(comment: comment))
-                        .toList() ??
-                    [],
-              ),
+              builder: (context, snapshot) {
+                final commentsData = snapshot.data ?? [];
+                commentsData.removeWhere((element) => element == null);
+                commentsData
+                    .sort((a, b) => b!.timestamp.compareTo(a!.timestamp));
+
+                final commentCards = commentsData
+                    .map((comment) => MyCommentCard(comment: comment))
+                    .toList();
+                return Column(
+                  children: commentCards,
+                );
+              },
             )
           ],
         ),

@@ -28,14 +28,14 @@ class _MySigninScreenState extends State<MySigninScreen> {
     try {
       await signin(_emailController.text, _passwordController.text);
     } on FirebaseAuthException catch (e) {
-      showInfoToast(e.message ?? "An error occured");
+      showMyToast(e.message ?? "An error occured");
       return;
     } catch (e) {
-      showInfoToast("Signin failed");
+      showMyToast("Signin failed");
       return;
     }
 
-    showInfoToast("Signin sucess!");
+    showMyToast("Signin sucess!");
 
     log(isEmailVerified().toString(), name: "email verified");
 

@@ -85,9 +85,9 @@ class _MyEditProfileScreenState extends State<MyEditProfileScreen> {
             if (image != null) {
               try {
                 await uploadProfilePic(image.path);
-                showInfoToast("Update sucess");
+                showMyToast("Update sucess");
               } catch (e) {
-                showInfoToast("Update failed");
+                showMyToast("Update failed");
               }
             }
           },
