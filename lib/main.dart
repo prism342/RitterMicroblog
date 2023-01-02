@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ritter_microblog/auth_screens/signup_screen.dart';
+import 'package:ritter_microblog/screens/auth_screens/signup_screen.dart';
 import 'package:ritter_microblog/firebase_apis.dart';
 import 'package:ritter_microblog/screens/edit_profile_screen/edit_profile_screen.dart';
 
-import 'auth_screens/signin_screen.dart';
-import 'auth_screens/verify_email_screen.dart';
+import 'screens/auth_screens/signin_screen.dart';
+import 'screens/auth_screens/verify_email_screen.dart';
 import 'screens/home_screen/home_screen.dart';
 import 'screens/new_post_screen.dart';
 import 'screens/settings_screen.dart';

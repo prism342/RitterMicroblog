@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ritter_microblog/data_models.dart';
@@ -7,64 +8,58 @@ import 'package:ritter_microblog/widgets/my_text_fields.dart';
 import 'package:ritter_microblog/widgets/logo.dart';
 import 'package:ritter_microblog/widgets/toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:developer' as developer;
 
-import '../widgets/my_buttons.dart';
+import '../../widgets/my_buttons.dart';
 
-class MySignupScreen extends StatefulWidget {
-  const MySignupScreen({super.key});
+class MySigninScreen extends StatefulWidget {
+  const MySigninScreen({super.key});
 
   @override
-  State<MySignupScreen> createState() => _MySignupScreenState();
+  State<MySigninScreen> createState() => _MySigninScreenState();
 }
 
-class _MySignupScreenState extends State<MySignupScreen> {
+class _MySigninScreenState extends State<MySigninScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void onSignupButtonPressed() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        await signup(
-          _emailController.text,
-          _passwordController.text,
-        );
-      } on FirebaseAuthException catch (e) {
-        showMyToast(e.message ?? "An error occurred.");
+  void onSigninButtonClick() async {
+    _formKey.currentState!.validate();
 
-        return;
-      } catch (e) {
-        developer.log("Exception: ${e.toString()}",
-            name: 'onSignupButtonClick');
+    try {
+      await signin(_emailController.text, _passwordController.text);
+    } on FirebaseAuthException catch (e) {
+      showMyToast(e.message ?? "An error occured");
+      return;
+    } catch (e) {
+      showMyToast("Signin failed");
+      return;
+    }
 
-        showMyToast("Signup failed.");
+    showMyToast("Signin sucess!");
 
-        return;
-      }
+    log(isEmailVerified().toString(), name: "email verified");
 
-      showMyToast("Signup success!");
+    if (!mounted) return;
 
-      SharedPreferences.getInstance().then((prefs) {
-        prefs.setString("email", _emailController.text);
-        prefs.setString("password", _passwordController.text);
-      });
+    log(isEmailVerified().toString(), name: "email verified");
 
-      sendVerificationEmail();
-
-      String uid = getSelfUid();
-      createSelfUserData(
-        UserData(
-            username: _usernameController.text,
-            handle: uid.substring(0, 8),
-            joinedDate: Timestamp.now()),
-      );
-
-      if (!mounted) return;
-
+    if (isEmailVerified()) {
+      Navigator.popUntil(context, (route) => false);
+      Navigator.pushNamed(context, "/home");
+    } else {
       Navigator.pushNamed(context, "/verify-email");
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      _emailController.text = prefs.getString("email") ?? "";
+      _passwordController.text = prefs.getString("password") ?? "";
+    });
   }
 
   @override
@@ -86,24 +81,19 @@ class _MySignupScreenState extends State<MySignupScreen> {
                           padding: const EdgeInsets.only(bottom: 12),
                           controller: _emailController,
                           labelText: "Email"),
-                      MyAuthTextField(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          controller: _usernameController,
-                          labelText: "Username"),
                       MyPasswordTextField(
                           padding: const EdgeInsets.only(bottom: 36),
                           controller: _passwordController),
                       MyAuthButton(
                         padding: const EdgeInsets.only(bottom: 36),
-                        lable: "Signup",
-                        onPressed: onSignupButtonPressed,
+                        lable: "Signin",
+                        onPressed: onSigninButtonClick,
                       ),
                       MyTextWithButton(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        text: "Already have an account? ",
-                        buttonText: "Signin",
+                        text: "Don't have an account? ",
+                        buttonText: "Signup",
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, "/signin");
+                          Navigator.pushReplacementNamed(context, "/signup");
                         },
                       )
                     ],
