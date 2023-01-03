@@ -283,6 +283,15 @@ Stream<List<CommentActivity?>> getPostCommentsStream(String postID) {
   return commentsStream;
 }
 
+Future<List<PostActivity>> getPostActivities(String userID) async {
+  final querySnap = await postsCol.where("creatorID", isEqualTo: userID).get();
+  final postActivities = querySnap.docs
+      .map((docSnap) => PostActivity.fromMap(docSnap.id, docSnap.data()))
+      .whereType<PostActivity>()
+      .toList();
+  return postActivities;
+}
+
 Future<List<CommentActivity>> getCommentActivities(String userID) async {
   final querySnap =
       await commentsCol.where("creatorID", isEqualTo: userID).get();
@@ -311,6 +320,35 @@ Future<List<LikeActivity>> getLikeActivities(String userID) async {
       .toList();
   return likeActivities;
 }
+
+Future<List<PostActivity>> getUserActivities(String userID) async {
+  final posts = await getPostActivities(userID);
+  // final comments = await getCommentActivities(userID);
+  // final reposts = await getRepostActivities(userID);
+  final likes = await getLikeActivities(userID);
+
+  var uniqueActivities = <String, PostActivity>{};
+
+  for (final post in posts) {
+    uniqueActivities[post.docID ?? ""] = post;
+  }
+
+  for (final like in likes) {
+    final likedPost = await getPostByID(like.refPostID);
+    if (likedPost != null) {
+      uniqueActivities[likedPost.docID ?? ""] = likedPost;
+    }
+  }
+
+  var activities = uniqueActivities.values.toList();
+  activities.sort((a, b) => b.timestamp.compareTo(a.timestamp));
+
+  return activities;
+}
+
+// Future<List<PostActivity>> getRelativeActivities(String userID) {
+
+// }
 
 /*
 search

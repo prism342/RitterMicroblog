@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ritter_microblog/widgets/my_card_views.dart';
 import 'package:ritter_microblog/widgets/my_images.dart';
 
 import '../../data_models.dart';
@@ -34,78 +35,80 @@ class _MyProfileTabState extends State<MyProfileTab> {
           "${joinedDate.month}/${joinedDate.day}/${joinedDate.year}";
     }
 
-    return Stack(
-      children: [
-        Column(
-          children: [
-            Container(
-              height: 100,
-              // color: theme.colorScheme.background,
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 16.0),
-                child: MySmallButton(
-                  "Edit",
-                  onPressed: onEditButtonPress,
+    return SingleChildScrollView(
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              Container(
+                height: 100,
+                // color: theme.colorScheme.background,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: MySmallButton(
+                    "Edit",
+                    onPressed: onEditButtonPress,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(userData.username ?? "",
-                      style: theme.textTheme.titleMedium),
-                  Text(
-                    "@${userData.handle ?? ""}",
-                    style: theme.textTheme.labelMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_month_rounded,
-                        color: theme.textTheme.labelMedium?.color,
-                        size: 20,
-                      ),
-                      Text(
-                        "  $joinedDateStr",
-                        style: theme.textTheme.labelMedium,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Text("$followers", style: theme.textTheme.bodyMedium),
-                      Text(
-                        " Followers",
-                        style: theme.textTheme.labelMedium,
-                      ),
-                      Text(
-                        "   ",
-                        style: theme.textTheme.bodyMedium,
-                      ),
-                      Text("$following", style: theme.textTheme.bodyMedium),
-                      Text(" Following", style: theme.textTheme.labelMedium)
-                    ],
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(userData.username ?? "",
+                        style: theme.textTheme.titleMedium),
+                    Text(
+                      "@${userData.handle ?? ""}",
+                      style: theme.textTheme.labelMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_month_rounded,
+                          color: theme.textTheme.labelMedium?.color,
+                          size: 20,
+                        ),
+                        Text(
+                          "  $joinedDateStr",
+                          style: theme.textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Text("$followers", style: theme.textTheme.bodyMedium),
+                        Text(
+                          " Followers",
+                          style: theme.textTheme.labelMedium,
+                        ),
+                        Text(
+                          "   ",
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                        Text("$following", style: theme.textTheme.bodyMedium),
+                        Text(" Following", style: theme.textTheme.labelMedium)
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 70, left: 25),
-          child: MyProfilePic(
-            url: userData.profilePicUrl,
-            radius: 30,
+            ],
           ),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.only(top: 70, left: 25),
+            child: MyProfilePic(
+              url: userData.profilePicUrl,
+              radius: 30,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -123,7 +126,16 @@ class _MyProfileTabState extends State<MyProfileTab> {
             )
           ]),
         ),
-        Divider(thickness: 2),
+        const SizedBox(height: 8),
+        const Divider(thickness: 2, height: 0),
+        FutureBuilder(
+          future: getUserActivities(getSelfUid()),
+          builder: (context, snapshot) => Column(
+            children: (snapshot.data ?? [])
+                .map((activity) => MyPostCard(post: activity))
+                .toList(),
+          ),
+        )
       ],
     );
   }
