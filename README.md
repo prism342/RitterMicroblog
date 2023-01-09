@@ -1,16 +1,33 @@
 # ritter_microblog
 
-A new Flutter project.
+A microblogging app built with Flutter and Firebase.
 
-## Getting Started
+## Screenshots
 
-This project is a starting point for a Flutter application.
+### SigninScreen
 
-A few resources to get you started if this is your first Flutter project:
+<kbd><img src="./readme/android/SigninScreen.jpg" width="360" height="800" ></kbd>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### SignupScreen
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<kbd><img src="./readme/android/SignupScreen.jpg" width="360" height="800" ></kbd>
+
+### HomeScreen
+
+<kbd><img src="./readme/android/HomeScreen.jpg" width="360" height="800" ></kbd>
+
+### PostDetailScreen
+
+<kbd><img src="./readme/android/PostDetailScreen.jpg" width="360" height="800" ></kbd>
+
+### ExploreScreen
+
+<kbd><img src="./readme/android/ExploreScreen.jpg" width="360" height="800" ></kbd>
+
+### ProfileScreen
+
+<kbd><img src="./readme/android/ProfileScreen.jpg" width="360" height="800" ></kbd>
+
+### EditProfileScreen
+
+<kbd><img src="./readme/android/EditProfileScreen.jpg" width="360" height="800" ></kbd>
